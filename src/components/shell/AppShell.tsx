@@ -10,7 +10,9 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog'
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
 import { useApp, type Screen } from '@/store/useApp'
+import { CircleHelp } from 'lucide-react'
 
 /**
  * Fixed app frame for a 1280x800 laptop: slim header + full-height stage.
@@ -21,6 +23,7 @@ import { useApp, type Screen } from '@/store/useApp'
 export default function AppShell({ screen, children }: { screen: Screen; children: ReactNode }) {
   const hasShots = useApp((s) => s.shots.some(Boolean))
   const reset = useApp((s) => s.reset)
+  const goTo = useApp((s) => s.goTo)
   const [confirmHome, setConfirmHome] = useState(false)
 
   const goHome = () => {
@@ -45,7 +48,21 @@ export default function AppShell({ screen, children }: { screen: Screen; childre
         >
           <img src="/brand/logo-horizontal.svg" alt="" width={1039} height={293} className="h-9 w-auto" />
         </button>
-        {screen !== 'start' && <StepIndicator current={screen} />}
+        {screen !== 'start' && (
+          <div className="flex items-center gap-3">
+            {screen === 'shoot' && (
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button variant="ghost" size="icon" aria-label="사용법 보기" onClick={() => goTo('guide')}>
+                    <CircleHelp className="size-5" />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent side="bottom">사용법 보기</TooltipContent>
+              </Tooltip>
+            )}
+            <StepIndicator current={screen} />
+          </div>
+        )}
       </header>
       <main className="mx-auto min-h-0 w-full max-w-[1440px] flex-1">{children}</main>
 

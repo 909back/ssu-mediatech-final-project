@@ -463,13 +463,6 @@ export default function ShootScreen() {
       {/* Right: frame + actions */}
       <aside className="flex shrink-0 flex-col gap-4 lg:w-[340px]">
         <div className="flex items-center justify-end gap-3">
-          <button
-            type="button"
-            onClick={() => goTo('guide')}
-            className="rounded-sm text-sm text-ink-2 underline-offset-4 hover:text-ink hover:underline"
-          >
-            사용법
-          </button>
           <span className="rounded-full bg-paper-2 px-3 py-1 text-sm font-semibold text-ink tabular-nums" aria-live="polite">
             {taken}/{shots.length}컷
           </span>
