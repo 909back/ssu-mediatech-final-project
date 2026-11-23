@@ -45,7 +45,7 @@ export default function App() {
       <AppShell screen={screen}>
         <Screen key={screen} />
       </AppShell>
-      <Toaster position="top-center" />
+      <Toaster position="bottom-right" />
     </TooltipProvider>
   )
 }
