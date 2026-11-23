@@ -96,3 +96,7 @@ Canvas preview of the composed frame in the center; tool panel on the right with
 6. 8컷 is its own card on Frame select; the toggle is gone. (User request.)
 7. Frame select copy: count-first labels, no jargon, no keyboard instructions as the helper line. (User feedback: copy felt awkward.)
 8. Shoot ready state listens for the V-sign immediately and says so in large text, with visible hand feedback. (User expected V to start shooting right away and did not know it was supposed to.)
+
+## v3 changes (requested by user 2026-11-23)
+9. New screen `guide` (사용법) between Frame select and Shoot: Start → Frame → Guide → Shoot. It's a full page with two illustrated steps: the V-sign character and "브이 하면 바로 찍어요", then the open-palm character and "손바닥을 펴면 꾸미러 가요". It also mentions that the button or Space works. One primary button "촬영하러 가기" (Space works too), plus a back button. It shows on every new session, because each booth visitor is new; going back from Shoot to Frame and forward again skips it. Illustrations: public/brand/guide/gesture-vsign.png and gesture-palm.png.
+10. Because the guide page teaches the gestures, Shoot and Review drop their instruction lines ("브이 하면 바로 찍어요", "버튼이나 스페이스 바도 돼요", "손바닥을 펴면 꾸미러 가요"). What stays on the preview is only live status: "손 인식 준비 중", the hint near a seen hand, the 1 s ring, and "잠시만요". A small "사용법" link on Shoot reopens the guide.
