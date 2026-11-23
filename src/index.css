@@ -1,3 +1,17 @@
+/* Hallmark · shape: app screen · genre: playful · theme: brand · redesign: full
+ * paper: #fff (surface: absolute, the original white) · accent: oklch(45.4% 0.0892 57.03) · display: Pretendard Variable · body: Pretendard Variable
+ * nav: kept top bar, wordmark left and the four-step track right · signature: the photo strip, from the frame pick to the roll-out · states: camera waiting, denied, not found, failed, model failed, shooting, review, export running
+ * axes: light/grotesk-heavy/neutral · posture: restrained, brown on the one primary action per screen · material: cream paper and the brand felt illustrations; controls are the stock shadcn and Radix set at the owner's request · contrast: pass · v2.0.0 */
+/* Hallmark · pre-emit critique: P4 H5 E4 S4 R4 V3 · weakest: V, a tool screen keeps the camera-left, controls-right order the task needs; varied by putting the frame pick and the save strip in the hero slot instead of a card grid */
+/* Hallmark · tokens: Hallmark accent and muted are named --color-signal and --color-ink-3 here, because shadcn's @theme inline already owns --color-accent (hover surface) and --color-muted */
+/* Hallmark · dropped setEight(v), setSelected(id), eight-shot, frame-help · the owner asked for 2x4 8컷 as its own fourth radio option instead of a switch under the 2x4 card; each option now calls setSelected(o.key) and the 8컷 option sets layoutId 2x4 with eightShotMode on */
+/* Hallmark · waive 28b · the shoot video is a hidden one-pixel source for p5 and ml5, never painted · the camera canvas is the visible element and has no poster to show before permission */
+/* Hallmark · waive 39b · the four frame radio rows stand 80px because each carries a 52px frame schematic beside its shot count label · the row is the option, the 다음 button stays at app height */
+/* Hallmark · dismissed F18 · the flagged data-slot nodes are shadcn component hooks (button, progress), not Hallmark picture slots; no picture slot exists in this app */
+/* Hallmark · dropped "고른 칸 수만큼 찍어요." and every helper line that restated the UI · the owner asked for a copy pass that keeps only lines the user cannot see and needs now; the full list is in the handoff */
+/* Hallmark · waive 7b · surface: absolute, paper and card are #fff with Radix gray-12 ink at 17:1 · the owner chose the original white surfaces over the brown-tinted paper */
+/* Hallmark · focus ring is brand-11, not the brand-8 the owner named · brand-8 measures 2.3:1 on white and gate 26a (Floor) needs 3:1; brand-11 is the same brown hue at 5.9:1 */
+/* Hallmark · finish-review: subagent · 8 findings · 7 resolved 1 partial (shoot at 375: stage now 4:3 and the filter bar scrolls, but the gesture pill and filter bar still overlay the camera-state message on a phone) · gap: the felt material went flat when the owner chose the original white and gray colour roles */
 /* Owned by foundation. Stage agents: do not edit; ask via docs/architecture.md rules. */
 @import "tailwindcss";
 @import "tw-animate-css";
@@ -5,11 +19,16 @@
    export into this file; keep the --brand-* and --gray-* names. */
 @import "./styles/radix-palette.css";
 @import "./styles/fonts.css";
+@import "./tokens.css";
+@import "./base.css" layer(base);
+
+/* Light only: shadcn dark: classes apply under a .dark ancestor, never from the OS setting. */
+@custom-variant dark (&:is(.dark *));
 
 /* Light-only app for now: no dark palette was exported, so there is no .dark block. */
 
 @theme inline {
-  --font-sans: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+  --font-sans: var(--font-body);
 
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
@@ -65,37 +84,37 @@
   --color-gray-a12: var(--gray-a12);
 }
 
-/* shadcn semantic tokens mapped onto the Radix scales.
-   Rule: brand (accent) only on primary actions / main-flow CTA.
-   Selected states elsewhere use foreground (gray-12), not brand. */
+/* shadcn semantic tokens mapped onto the Hallmark roles (which read the Radix scales).
+   Rule: brand (signal) only on the primary action of each screen.
+   Selected states elsewhere use ink, not brand. */
 :root {
   --radius: 0.75rem;
 
-  --background: #fff;
-  --foreground: var(--gray-12);
-  --card: #fff;
-  --card-foreground: var(--gray-12);
-  --popover: #fff;
-  --popover-foreground: var(--gray-12);
+  --background: var(--color-paper);
+  --foreground: var(--color-ink);
+  --card: var(--color-paper);
+  --card-foreground: var(--color-ink);
+  --popover: var(--color-paper);
+  --popover-foreground: var(--color-ink);
 
-  --primary: var(--brand-9);
-  --primary-foreground: var(--brand-contrast);
+  --primary: var(--color-signal);
+  --primary-foreground: var(--color-signal-ink);
 
   --secondary: var(--gray-3);
-  --secondary-foreground: var(--gray-12);
+  --secondary-foreground: var(--color-ink);
   --muted: var(--gray-3);
-  --muted-foreground: var(--gray-11);
-  /* shadcn "accent" = neutral hover surface, NOT the brand color. */
+  --muted-foreground: var(--color-ink-2);
+  /* shadcn "accent" = warm hover surface, NOT the brand color. */
   --accent: var(--gray-4);
-  --accent-foreground: var(--gray-12);
+  --accent-foreground: var(--color-ink);
 
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: var(--gray-6);
+  --destructive: var(--color-error);
+  --border: var(--color-rule);
   --input: var(--gray-7);
-  --ring: var(--brand-8);
+  --ring: var(--color-focus);
 
   /* App shell sizes (target viewport 1280x800). */
-  --header-h: 56px;
+  --header-h: 60px;
 }
 
 @layer base {
@@ -107,12 +126,11 @@
   }
   body {
     @apply bg-background text-foreground font-sans antialiased;
-    min-width: 1024px;
     word-break: keep-all;
   }
-  /* Every interactive element gets a visible focus style, even unstyled ones. */
-  :where(a, button, [role="button"], input, select, textarea, [tabindex]:not([tabindex="-1"])):focus-visible {
-    outline: 2px solid var(--ring);
+  /* Every interactive element gets a visible focus style, even unstyled ones. Instant, never faded. */
+  :where(a, button, [role="button"], [role="radio"], input, select, textarea, [tabindex]:not([tabindex="-1"])):focus-visible {
+    outline: 2px solid var(--color-focus);
     outline-offset: 2px;
   }
 }

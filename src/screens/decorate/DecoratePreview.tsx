@@ -90,7 +90,7 @@ export default function DecoratePreview({
   return (
     <div ref={boxRef} className="relative flex min-h-0 flex-1 items-center justify-center">
       <div
-        className="relative shadow-[0_12px_40px_-12px_var(--gray-a6)] ring-1 ring-gray-a3"
+        className="relative shadow-(--shadow-card)"
         style={{ width: displayW, height: displayH }}
         onPointerDown={() => onSelect(null)}
       >

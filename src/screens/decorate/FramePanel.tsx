@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { ImagePlus, X } from 'lucide-react'
+import { ImagePlus, Pipette, X } from 'lucide-react'
 import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
 import { FRAME_COLORS, THEMES, composeLayout, type ComposeShot } from '@/lib/compose'
@@ -16,7 +16,7 @@ interface Props {
   decor: Decor
 }
 
-const selectedRing = 'ring-2 ring-foreground ring-offset-2 ring-offset-background'
+const selectedRing = 'ring-2 ring-ink ring-offset-2 ring-offset-paper'
 
 export default function FramePanel({ shots, layout, eightShotMode, decor }: Props) {
   const updateDecor = useApp((s) => s.updateDecor)
@@ -50,7 +50,7 @@ export default function FramePanel({ shots, layout, eightShotMode, decor }: Prop
               aria-pressed={colorActive && decor.frameColor.toLowerCase() === c.value}
               onClick={() => updateDecor({ frameColor: c.value, theme: 'basic', bgImage: null })}
               className={cn(
-                'size-10 rounded-full border border-gray-a6 transition-transform hover:scale-105',
+                'size-10 rounded-full border border-rule-2 transition-transform hover:scale-105',
                 colorActive && decor.frameColor.toLowerCase() === c.value && selectedRing,
               )}
               style={{ backgroundColor: c.value }}
@@ -58,14 +58,15 @@ export default function FramePanel({ shots, layout, eightShotMode, decor }: Prop
           ))}
           <label
             className={cn(
-              'relative size-10 cursor-pointer overflow-hidden rounded-full border border-gray-a6 has-focus-visible:outline-2 has-focus-visible:outline-offset-2 has-focus-visible:outline-ring',
+              'relative size-10 cursor-pointer overflow-hidden rounded-full border border-dashed border-ink-3 bg-card has-focus-visible:outline-2 has-focus-visible:outline-offset-2 has-focus-visible:outline-ring',
               colorActive && !isPreset && selectedRing,
             )}
             title="직접 고르기"
             style={{
-              background: colorActive && !isPreset ? decor.frameColor : 'conic-gradient(red, yellow, lime, aqua, blue, magenta, red)',
+              ...(colorActive && !isPreset ? { background: decor.frameColor } : {}),
             }}
           >
+            {!(colorActive && !isPreset) && <Pipette aria-hidden className="absolute inset-0 m-auto size-4 text-ink-2" />}
             <span className="sr-only">직접 고르기</span>
             <input
               type="color"
@@ -88,13 +89,13 @@ export default function FramePanel({ shots, layout, eightShotMode, decor }: Prop
                 aria-pressed={active}
                 onClick={() => updateDecor({ theme: t.id as ThemeId, bgImage: null })}
                 className={cn(
-                  'flex flex-col items-center gap-1.5 rounded-lg p-1.5 text-xs text-gray-11 transition-colors hover:bg-gray-3',
-                  active && 'bg-gray-3 font-semibold text-foreground',
+                  'flex flex-col items-center gap-1.5 rounded-lg p-1.5 text-xs text-ink-2 transition-colors hover:bg-paper-3',
+                  active && 'font-semibold text-foreground',
                 )}
               >
                 <span
                   className={cn(
-                    'flex h-24 w-full items-center justify-center overflow-hidden rounded-md bg-gray-2',
+                    'flex h-24 w-full items-center justify-center overflow-hidden rounded-md bg-paper-2',
                     active && 'ring-2 ring-foreground',
                   )}
                 >
@@ -110,7 +111,7 @@ export default function FramePanel({ shots, layout, eightShotMode, decor }: Prop
       <PanelSection title="배경 사진">
         <div className="flex items-center gap-3">
           {decor.bgImage && (
-            <img src={decor.bgImage} alt="배경 사진" className="size-12 rounded-md object-cover ring-1 ring-gray-a6" />
+            <img src={decor.bgImage} alt="배경 사진" className="size-12 rounded-md object-cover ring-1 ring-rule-2" />
           )}
           <Button variant="outline" onClick={() => fileRef.current?.click()}>
             <ImagePlus />

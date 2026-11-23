@@ -96,9 +96,9 @@ export default function DecorateScreen() {
   const rank = selected ? order.findIndex((s) => s.id === selected.id) : -1
 
   return (
-    <section className="flex h-full">
-      <div className="flex min-w-0 flex-1 flex-col bg-gray-2">
-        <div className="flex min-h-0 flex-1 px-8 pt-12 pb-4">
+    <section className="flex flex-col gap-6 px-4 pb-6 lg:h-full lg:flex-row lg:gap-8 lg:px-8 lg:pb-8">
+      <div className="flex h-[640px] min-w-0 shrink-0 flex-col overflow-hidden rounded-(--radius-card) bg-paper-2 lg:h-auto lg:flex-1">
+        <div className="flex min-h-0 flex-1 px-8 pt-14 pb-2">
           <DecoratePreview
             shots={shots}
             layout={layout}
@@ -115,7 +115,7 @@ export default function DecorateScreen() {
             뒤로
           </Button>
           {selected ? (
-            <div className="flex items-center gap-1 rounded-lg bg-background p-1 shadow-sm ring-1 ring-gray-a3">
+            <div className="flex items-center gap-1 rounded-full bg-card p-1 shadow-(--shadow-card)">
               <Button variant="ghost" size="sm" disabled={rank >= order.length - 1} onClick={() => reorder(1)}>
                 <ArrowUpToLine />
                 앞으로
@@ -130,17 +130,15 @@ export default function DecorateScreen() {
               </Button>
             </div>
           ) : (
-            <p className="text-sm text-gray-11">
-              {decor.stickers.length ? '스티커를 누르면 옮기거나 크기를 바꿀 수 있어요' : '오른쪽에서 프레임과 스티커를 골라 보세요'}
-            </p>
+            <span aria-hidden />
           )}
           <span aria-hidden className="w-18" />
         </div>
       </div>
 
-      <aside className="flex w-[380px] shrink-0 flex-col border-l bg-background">
+      <aside className="flex shrink-0 flex-col lg:w-[360px]">
         <Tabs defaultValue="frame" className="min-h-0 flex-1 gap-0">
-          <div className="px-5 pt-5 pb-4">
+          <div className="pb-5">
             <TabsList className="grid w-full grid-cols-4">
               <TabsTrigger value="frame">프레임</TabsTrigger>
               <TabsTrigger value="filter">필터</TabsTrigger>
@@ -148,7 +146,7 @@ export default function DecorateScreen() {
               <TabsTrigger value="text">글자</TabsTrigger>
             </TabsList>
           </div>
-          <div className="min-h-0 flex-1 overflow-y-auto px-5 pb-5">
+          <div className="min-h-0 flex-1 overflow-y-auto px-1 pb-5">
             <TabsContent value="frame">
               <FramePanel shots={shots} layout={layout} eightShotMode={eightShotMode} decor={decor} />
             </TabsContent>
@@ -163,7 +161,7 @@ export default function DecorateScreen() {
             </TabsContent>
           </div>
         </Tabs>
-        <div className="border-t p-5">
+        <div className="pt-4">
           <Button size="lg" className="h-12 w-full text-base" onClick={() => goTo('save')}>
             저장하기
           </Button>

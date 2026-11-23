@@ -11,8 +11,8 @@ export default function TextPanel({ dateOn, text }: { dateOn: boolean; text: str
   return (
     <div className="flex flex-col gap-6">
       <PanelSection title="날짜">
-        <div className="flex items-center justify-between rounded-lg bg-gray-2 px-4 py-3">
-          <Label htmlFor="date-on" className="font-normal text-gray-11">
+        <div className="flex items-center justify-between rounded-lg bg-paper-2 px-4 py-3">
+          <Label htmlFor="date-on" className="font-normal text-ink-2">
             오늘 날짜 넣기
           </Label>
           <Switch
@@ -27,7 +27,7 @@ export default function TextPanel({ dateOn, text }: { dateOn: boolean; text: str
       <PanelSection
         title="문구"
         aside={
-          <span className="text-xs tabular-nums text-gray-11">
+          <span className="text-xs tabular-nums text-ink-2">
             {text.length}/{MAX_TEXT}
           </span>
         }
@@ -39,7 +39,6 @@ export default function TextPanel({ dateOn, text }: { dateOn: boolean; text: str
           placeholder="예: 우리 첫 네컷"
           onChange={(e) => updateDecor({ text: e.target.value })}
         />
-        <p className="text-xs text-gray-11">사진 아래에 들어가요. 배경에 맞춰 검정이나 흰색으로 보여요.</p>
       </PanelSection>
     </div>
   )

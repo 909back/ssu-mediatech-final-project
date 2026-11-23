@@ -61,10 +61,10 @@ export default function StartError({ kind, busy = false, onRetry }: Props) {
   return (
     <div className="flex w-full max-w-md flex-col items-start gap-5">
       <div role="alert" className="flex gap-3">
-        <Icon aria-hidden className="mt-0.5 size-5 shrink-0 text-gray-11" />
+        <Icon aria-hidden className="mt-0.5 size-5 shrink-0 text-ink-2" />
         <div className="flex flex-col gap-1.5">
-          <p className="text-lg font-semibold text-gray-12">{title}</p>
-          <ol className="flex flex-col gap-0.5 text-[15px] leading-relaxed text-gray-11">
+          <p className="text-lg font-semibold text-ink">{title}</p>
+          <ol className="flex flex-col gap-0.5 text-[15px] leading-relaxed text-ink-2">
             {steps.map((s) => (
               <li key={s}>{s}</li>
             ))}

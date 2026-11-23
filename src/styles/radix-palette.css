@@ -1,7 +1,7 @@
 /* Radix custom palette, accent #7B481E, light mode only.
    Source: https://www.radix-ui.com/colors/custom?accent-light=7B481E (exported 2026-11-23)
    Renamed orange -> brand. Dark mode not exported yet. */
-:root, .light, .light-theme {
+:root {
   --brand-1: #fefdfc; --brand-2: #fef8f4; --brand-3: #fbede3; --brand-4: #f7e2d3;
   --brand-5: #f4d6c1; --brand-6: #f1c9ac; --brand-7: #ecb68f; --brand-8: #e19b65;
   --brand-9: #7b481e; --brand-10: #6b390b; --brand-11: #8d582f; --brand-12: #413228;
@@ -18,12 +18,11 @@
   --gray-a9: #00051d74; --gray-a10: #00051b7f; --gray-a11: #0002119d; --gray-a12: #000107e1;
   --gray-contrast: #fff; --gray-surface: #ffffffcc;
 
-  --color-background: #fff;
 }
 
 @supports (color: color(display-p3 1 1 1)) {
   @media (color-gamut: p3) {
-    :root, .light, .light-theme {
+    :root {
       --brand-1: oklch(99.4% 0.0023 57.03); --brand-2: oklch(98.3% 0.0089 57.03);
       --brand-3: oklch(95.4% 0.0195 57.03); --brand-4: oklch(92.6% 0.031 57.03);
       --brand-5: oklch(89.7% 0.0438 57.03); --brand-6: oklch(86.2% 0.0597 57.03);

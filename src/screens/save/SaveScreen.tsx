@@ -111,21 +111,18 @@ export default function SaveScreen() {
   const stripW = Math.round(STRIP_MAX_H * aspect)
 
   return (
-    <section className="flex h-full items-center justify-center gap-20 px-12">
+    <section className="flex flex-col items-center gap-10 px-4 pb-6 lg:h-full lg:flex-row lg:justify-center lg:gap-24 lg:px-8 lg:pb-8">
       {/* Hero: the print slides out of the booth slot. */}
-      <div className="flex flex-col items-center" style={{ width: stripW + 40 }}>
-        <div aria-hidden className="h-3 w-full rounded-full bg-gray-12 shadow-inner" />
-        <div
-          className="-mt-1.5 overflow-hidden px-5 pb-6"
-          style={{ width: stripW + 40, height: STRIP_MAX_H + 30 }}
-        >
+      <div className="flex max-w-full flex-col items-center" style={{ width: stripW + 40 }}>
+        <div aria-hidden className="h-4 w-full rounded-full bg-stage" />
+        <div className="-mt-2 w-full overflow-hidden px-5 pb-8">
           {stripUrl ? (
             <motion.img
               src={stripUrl}
               alt="완성된 네컷 사진"
               draggable={false}
-              className="block rounded-[3px] shadow-lg ring-1 ring-gray-a6"
-              style={{ width: stripW, height: STRIP_MAX_H }}
+              className="block h-auto w-full rounded-[3px] shadow-(--shadow-card)"
+              style={{ aspectRatio: `${layout.width} / ${layout.height}` }}
               initial={reduceMotion ? false : { y: '-100%', opacity: 0.4 }}
               animate={{ y: '0%', opacity: 1 }}
               transition={{ duration: ROLL_SECONDS, ease: [0.25, 0.1, 0.25, 1] }}
@@ -134,24 +131,23 @@ export default function SaveScreen() {
             <div
               role="status"
               aria-label="사진을 준비하고 있어요"
-              className="rounded-[3px] bg-gray-3"
-              style={{ width: stripW, height: STRIP_MAX_H }}
+              className="w-full rounded-[3px] bg-paper-3"
+              style={{ aspectRatio: `${layout.width} / ${layout.height}` }}
             />
           )}
         </div>
       </div>
 
-      <div className="flex w-80 flex-col gap-6">
+      <div className="flex w-full max-w-[340px] flex-col gap-6">
         <div className="flex flex-col gap-1.5">
-          <h1 className="text-2xl font-bold text-gray-12">다 됐어요</h1>
-          <p className="text-sm text-gray-11">원하는 형식으로 저장하세요.</p>
+          <h1 className="text-3xl font-extrabold tracking-tight text-ink">다 됐어요</h1>
         </div>
 
         <div className="flex flex-col gap-4">
           <ExportRow job={jobs.png}>
             <Button
               size="lg"
-              className="h-12 w-full text-base"
+              className="w-full"
               disabled={jobs.png.running || !stripUrl}
               onClick={() => run('png')}
             >
@@ -236,11 +232,11 @@ function ExportRow({ job, note, children }: { job: JobState; note?: string; chil
         aria-label="저장 진행률"
         aria-hidden={!job.running}
         className={cn(
-          'h-1.5 bg-gray-4 transition-opacity [&>[data-slot=progress-indicator]]:bg-gray-12',
+          'h-1.5 bg-paper-3 transition-opacity [&>[data-slot=progress-indicator]]:bg-ink',
           job.running ? 'opacity-100' : 'opacity-0',
         )}
       />
-      {note && <p className="text-xs leading-relaxed text-gray-11">{note}</p>}
+      {note && <p className="text-sm leading-relaxed text-ink-2">{note}</p>}
     </div>
   )
 }

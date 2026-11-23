@@ -45,7 +45,7 @@ export default function FramePanel({
 
   return (
     <div
-      className="relative shrink-0 rounded-md border bg-background shadow-sm"
+      className="relative shrink-0 rounded-[4px] bg-card shadow-(--shadow-card)"
       style={{ width: layout.width * scale, height: layout.height * scale }}
     >
       {rects.map((r, cell) => {
@@ -56,9 +56,9 @@ export default function FramePanel({
           <div
             key={cell}
             className={cn(
-              'absolute overflow-hidden rounded-sm bg-gray-4',
-              isNext && 'outline-2 outline-offset-2 outline-gray-12 outline-dashed',
-              selected && 'outline-2 outline-offset-2 outline-gray-12',
+              'absolute overflow-hidden rounded-[2px] bg-paper-3',
+              isNext && 'outline-2 outline-offset-2 outline-ink outline-dashed',
+              selected && 'outline-2 outline-offset-2 outline-ink',
             )}
             style={{ left: r.x * scale, top: r.y * scale, width: r.w * scale, height: r.h * scale }}
           >
@@ -75,7 +75,7 @@ export default function FramePanel({
               />
             )}
             {!shot && (
-              <span className="absolute inset-0 grid place-items-center text-sm font-medium text-gray-10 tabular-nums">
+              <span className="absolute inset-0 grid place-items-center text-sm font-semibold text-ink-3 tabular-nums">
                 {r.shotIndex + 1}
               </span>
             )}
@@ -84,12 +84,12 @@ export default function FramePanel({
                 type="button"
                 aria-label={`${r.shotIndex + 1}번째 사진 선택`}
                 aria-pressed={selected}
-                className="absolute inset-0 cursor-pointer transition-opacity hover:bg-gray-a3 focus-visible:-outline-offset-2"
+                className="absolute inset-0 cursor-pointer transition-colors hover:bg-ink/10 focus-visible:-outline-offset-2"
                 onClick={() => onSelectCell(selected ? null : cell)}
               />
             )}
             {selected && (
-              <div className="pointer-events-none absolute inset-0 grid place-items-center bg-gray-a6">
+              <div className="pointer-events-none absolute inset-0 grid place-items-center bg-ink/30">
                 <Button
                   size="sm"
                   variant="secondary"

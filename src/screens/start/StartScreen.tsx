@@ -24,6 +24,7 @@ export default function StartScreen() {
   const mounted = useRef(true)
   const startRef = useRef<HTMLButtonElement>(null)
   const heroRef = useRef<HTMLImageElement>(null)
+  const stripRef = useRef<HTMLImageElement>(null)
   const itemsRef = useRef<HTMLDivElement>(null)
 
   const busy = loading || cameraStatus === 'requesting'
@@ -40,10 +41,11 @@ export default function StartScreen() {
   // Entrance: transform + opacity only, skipped for reduced motion.
   useLayoutEffect(() => {
     if (prefersReducedMotion()) return
-    if (!heroRef.current || !itemsRef.current) return
+    if (!heroRef.current || !itemsRef.current || !stripRef.current) return
     const items = itemsRef.current.querySelectorAll('[data-enter]')
     const anims = [
       animate(heroRef.current, { opacity: [0, 1], y: [48, 0] }, { duration: 0.7, ease: [0.22, 1, 0.36, 1] }),
+      animate(stripRef.current, { opacity: [0, 1], y: [-64, 0] }, { duration: 0.9, delay: 0.25, ease: [0.22, 1, 0.36, 1] }),
       animate(items, { opacity: [0, 1], y: [16, 0] }, { duration: 0.5, delay: stagger(0.08, { startDelay: 0.15 }), ease: 'easeOut' }),
     ]
     return () => anims.forEach((a) => a.stop())
@@ -84,28 +86,41 @@ export default function StartScreen() {
   const showRetrying = busy && retrying
 
   return (
-    <section aria-label="시작" className="relative h-full min-h-[640px] w-full overflow-hidden bg-background">
-      <img
-        ref={heroRef}
-        src="/brand/character.png"
-        alt="도토리를 안고 웃는 다람쥐"
-        width={1013}
-        height={1024}
-        className="pointer-events-none absolute bottom-0 left-[4%] h-[92%] max-h-[760px] w-auto select-none"
-      />
+    <section aria-label="시작" className="relative w-full overflow-hidden bg-background lg:h-full lg:min-h-[640px]">
+      {/* The character with the strip it took, on the left. */}
+      <div className="relative h-[440px] lg:absolute lg:inset-y-0 lg:left-0 lg:h-auto lg:w-[52%]">
+        <img
+          ref={heroRef}
+          src="/brand/character.png"
+          alt="도토리를 안고 웃는 다람쥐"
+          width={1013}
+          height={1024}
+          className="pointer-events-none absolute bottom-0 left-[2%] h-[80%] max-h-[640px] w-auto max-w-none select-none"
+          draggable={false}
+        />
+        <img
+          ref={stripRef}
+          src="/brand/sample-strip.png"
+          alt="도토리 네컷 예시 사진"
+          width={260}
+          height={1024}
+          className="absolute top-[8%] left-[66%] h-[74%] max-h-[560px] w-auto rotate-[4deg] rounded-[3px] shadow-(--shadow-card) select-none"
+          draggable={false}
+        />
+      </div>
 
       <div
         ref={itemsRef}
-        className="absolute inset-y-0 right-[7%] flex w-[44%] max-w-[520px] flex-col justify-center"
+        className="flex flex-col px-4 py-8 lg:absolute lg:inset-y-0 lg:right-[7%] lg:w-[44%] lg:max-w-[520px] lg:justify-center lg:p-0"
       >
-        <h1 data-enter className="m-0">
+        <h1 data-enter className="m-0 max-w-none">
           <img src="/brand/wordmark.svg" alt="도토리네컷" width={687} height={195} className="h-auto w-full max-w-[440px]" />
         </h1>
-        <p data-enter className="mt-6 text-xl text-gray-11">
+        <p data-enter className="mt-6 text-xl text-ink-2">
           웹캠으로 찍고, 꾸미고, 저장해요.
         </p>
 
-        <div data-enter className="mt-10 flex min-h-[210px] flex-col justify-start">
+        <div data-enter className="mt-10 flex flex-col justify-start lg:min-h-[210px]">
           {showError || showRetrying ? (
             <StartError kind={errorKind ?? lastKind} busy={showRetrying} onRetry={handleStart} />
           ) : (
@@ -125,7 +140,7 @@ export default function StartScreen() {
                 )}
                 {busy ? '카메라 준비 중' : '촬영 시작'}
               </Button>
-              <p className="mt-5 flex items-center gap-2 text-[15px] text-gray-11">
+              <p className="mt-5 flex items-center gap-2 text-[15px] text-ink-2">
                 <Lock aria-hidden className="size-4 shrink-0" />
                 사진은 이 브라우저에만 남고 어디에도 업로드되지 않아요.
               </p>

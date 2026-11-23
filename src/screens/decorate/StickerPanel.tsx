@@ -21,7 +21,7 @@ interface Props {
 
 /** Neutral checkerboard so transparent areas read as transparent. */
 const checker =
-  'bg-[conic-gradient(var(--gray-4)_25%,var(--gray-1)_0_50%,var(--gray-4)_0_75%,var(--gray-1)_0)] bg-size-[16px_16px]'
+  'bg-[conic-gradient(var(--color-paper-3)_25%,var(--color-card)_0_50%,var(--color-paper-3)_0_75%,var(--color-card)_0)] bg-size-[16px_16px]'
 
 export default function StickerPanel({ onAdd }: Props) {
   const fileRef = useRef<HTMLInputElement>(null)
@@ -74,7 +74,7 @@ export default function StickerPanel({ onAdd }: Props) {
               type="button"
               aria-label={`${s.label} 붙이기`}
               onClick={() => void addBuiltin(s.src)}
-              className="flex aspect-square items-center justify-center rounded-lg bg-gray-2 p-2 ring-1 ring-gray-a3 transition-[transform,background-color] hover:scale-[1.03] hover:bg-gray-3"
+              className="flex aspect-square items-center justify-center rounded-lg bg-paper-2 p-2 ring-1 ring-rule transition-[transform,background-color] hover:scale-[1.03] hover:bg-paper-3"
             >
               <img src={s.src} alt="" className="max-h-full max-w-full object-contain" />
             </button>
@@ -90,12 +90,12 @@ export default function StickerPanel({ onAdd }: Props) {
           </Button>
         ) : (
           <div className="flex flex-col gap-4">
-            <div className={`flex h-40 items-center justify-center rounded-lg p-3 ring-1 ring-gray-a6 ${checker}`}>
+            <div className={`flex h-40 items-center justify-center rounded-lg p-3 ring-1 ring-rule-2 ${checker}`}>
               {result && <img src={result.src} alt="배경을 지운 스티커" className="max-h-full max-w-full object-contain" />}
             </div>
             <div className="flex flex-col gap-2">
               <div className="flex items-center justify-between text-sm">
-                <label htmlFor="cutout-tolerance" className="text-gray-11">
+                <label htmlFor="cutout-tolerance" className="text-ink-2">
                   배경 지우기 강도
                 </label>
                 <span className="tabular-nums text-foreground">{tolerance}</span>
@@ -109,7 +109,6 @@ export default function StickerPanel({ onAdd }: Props) {
                 onValueChange={([v]) => setTolerance(v)}
                 className="[&_[data-slot=slider-range]]:bg-foreground [&_[data-slot=slider-thumb]]:border-foreground"
               />
-              <p className="text-xs text-gray-11">가장자리 색과 비슷한 부분을 지워요. 사람이 지워지면 낮춰 보세요.</p>
             </div>
             <div className="flex gap-2">
               <Button
@@ -143,9 +142,6 @@ export default function StickerPanel({ onAdd }: Props) {
         />
       </PanelSection>
 
-      <p className="text-xs leading-relaxed text-gray-11">
-        스티커를 끌어서 옮기고, 모서리로 크기를, 위쪽 손잡이로 각도를 바꿔요. Delete 키로 지우고 Esc로 선택을 풀어요.
-      </p>
     </div>
   )
 }

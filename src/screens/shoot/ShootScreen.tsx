@@ -135,6 +135,19 @@ export default function ShootScreen() {
     ro.observe(el)
     return () => ro.disconnect()
   }, [])
+  // --- frame sheet size: fits inside its panel with 16px padding on every side ---
+  const panelRef = useRef<HTMLDivElement>(null)
+  const [panel, setPanel] = useState({ w: 0, h: 0 })
+  useEffect(() => {
+    const el = panelRef.current
+    if (!el) return
+    const ro = new ResizeObserver(([entry]) => {
+      const { width, height } = entry.contentRect
+      setPanel({ w: width, h: height })
+    })
+    ro.observe(el)
+    return () => ro.disconnect()
+  }, [])
   const aspect = cellAspect(layout, eightShotMode)
   const preview = fit(stage, aspect)
   const cell = cellRects(layout, eightShotMode)[0]
@@ -306,7 +319,7 @@ export default function ShootScreen() {
   }
 
   return (
-    <section className="flex h-full gap-6 p-6">
+    <section className="flex flex-col gap-6 px-4 pb-6 lg:h-full lg:flex-row lg:gap-8 lg:px-8 lg:pb-8">
       {/* Hidden source video for p5 and ml5 (kept in layout so Chrome keeps decoding). */}
       <video
         ref={videoRef}
@@ -318,9 +331,9 @@ export default function ShootScreen() {
       />
 
       {/* Left: live preview */}
-      <div ref={stageRef} className="relative grid min-w-0 flex-1 place-items-center">
+      <div ref={stageRef} className="relative grid aspect-[4/3] w-full min-w-0 shrink-0 place-items-center lg:aspect-auto lg:w-auto lg:flex-1">
         <div
-          className="relative overflow-hidden rounded-xl bg-gray-12 shadow-md"
+          className="relative overflow-hidden rounded-(--radius-card) bg-stage shadow-(--shadow-card)"
           style={{ width: preview.w, height: preview.h }}
         >
           {preview.w > 0 && (
@@ -337,7 +350,7 @@ export default function ShootScreen() {
           {!cameraReady && <CameraState status={cameraStatus} onRetry={retry} />}
 
           {/* Gesture control, top right */}
-          <div className="absolute top-4 right-4" onPointerUp={blurAfterPointer}>
+          <div className="absolute top-2 right-2 z-20 lg:top-4 lg:right-4" onPointerUp={blurAfterPointer}>
             <GestureControl
               enabled={gestureEnabled}
               onEnabledChange={(on) => {
@@ -346,7 +359,7 @@ export default function ShootScreen() {
               }}
               progress={handNeeded ? holdProgress : 0}
               status={handStatus}
-              hint={review ? '손바닥 펴고 1초' : 'V 포즈 1초'}
+              hint=""
               paused={shooting || cooling}
             />
           </div>
@@ -356,10 +369,10 @@ export default function ShootScreen() {
             <div className="pointer-events-none absolute inset-0 grid place-items-center">
               <motion.span
                 key={count}
-                className="text-[11rem] leading-none font-bold text-gray-1 tabular-nums drop-shadow-lg"
-                initial={reduceMotion ? false : { scale: 1.5, opacity: 0 }}
+                className="grid size-52 place-items-center rounded-full bg-paper text-[8.5rem] leading-none font-extrabold text-ink tabular-nums shadow-(--shadow-card)"
+                initial={reduceMotion ? false : { scale: 1.35, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
-                transition={{ type: 'spring', stiffness: 260, damping: 18 }}
+                transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
                 aria-live="assertive"
               >
                 {count}
@@ -368,11 +381,11 @@ export default function ShootScreen() {
           )}
 
           {/* Shutter flash */}
-          <div ref={flashRef} className="pointer-events-none absolute inset-0 bg-background opacity-0" />
+          <div ref={flashRef} className="pointer-events-none absolute inset-0 bg-flash opacity-0" />
 
           {/* Face filter toolbar, bottom center */}
           <div
-            className="absolute inset-x-0 bottom-4 flex justify-center"
+            className="absolute inset-x-0 bottom-4 z-20 flex justify-center px-2"
             onPointerUp={blurAfterPointer}
           >
             <ToggleGroup
@@ -381,13 +394,13 @@ export default function ShootScreen() {
               onValueChange={(v) => v && setFaceFilter(v as FaceFilterId)}
               aria-label="얼굴 필터"
               spacing={1}
-              className="rounded-full bg-background/90 p-1 shadow-sm backdrop-blur"
+              className="max-w-full overflow-x-auto rounded-full bg-card p-1 shadow-(--shadow-card)"
             >
               {FILTERS.map(({ id, label, Icon }) => (
                 <ToggleGroupItem
                   key={id}
                   value={id}
-                  className="rounded-full px-3 data-[state=on]:bg-gray-12 data-[state=on]:text-gray-1"
+                  className="h-10 rounded-full px-4 text-ink-2 hover:bg-paper-2 hover:text-ink data-[state=on]:bg-ink data-[state=on]:text-paper"
                 >
                   {faceFilter === id && id !== 'none' && faceStatus === 'loading' ? (
                     <LoaderCircle className="animate-spin" />
@@ -403,29 +416,26 @@ export default function ShootScreen() {
       </div>
 
       {/* Right: frame + actions */}
-      <aside className="flex w-80 shrink-0 flex-col gap-4">
+      <aside className="flex shrink-0 flex-col gap-4 lg:w-[340px]">
         <div className="flex items-center justify-between">
           <Button variant="ghost" size="sm" onClick={onBack} className="-ml-2">
             <ArrowLeft />
             뒤로
           </Button>
-          <span className="text-sm text-gray-11 tabular-nums" aria-live="polite">
+          <span className="rounded-full bg-paper-2 px-3 py-1 text-sm font-semibold text-ink tabular-nums" aria-live="polite">
             {taken}/{shots.length}컷
           </span>
         </div>
 
         <div className="space-y-1">
-          <h1 className="text-xl font-bold text-gray-12">
+          <h1 className="text-3xl leading-tight font-extrabold tracking-tight text-ink">
             {review ? '다 찍었어요' : shooting ? '찍는 중이에요' : '포즈를 준비해요'}
           </h1>
-          <p className="text-sm text-gray-11">
-            {review
-              ? '다시 찍고 싶은 칸을 눌러 보세요.'
-              : '버튼, 스페이스 바, V 포즈 중 편한 걸로 시작해요.'}
-          </p>
+          {review && <p className="text-base text-ink-2">다시 찍고 싶은 칸을 눌러 보세요.</p>}
         </div>
 
-        <div className="grid min-h-0 flex-1 place-items-center">
+        <div ref={panelRef} className="relative min-h-[480px] flex-1 overflow-hidden rounded-(--radius-card) bg-paper-2 lg:min-h-0">
+          <div className="absolute inset-0 grid place-items-center">
           <FramePanel
             layout={layout}
             eightShotMode={eightShotMode}
@@ -435,20 +445,21 @@ export default function ShootScreen() {
             selectedCell={selectedCell}
             onSelectCell={setSelectedCell}
             onRetake={retakeCell}
-            maxWidth={320}
-            maxHeight={470}
+            maxWidth={Math.max(0, Math.min(300, panel.w - 32))}
+            maxHeight={Math.max(0, Math.min(430, panel.h - 32))}
           />
+          </div>
         </div>
 
         {review ? (
-          <Button size="lg" className="h-12 text-base" onClick={() => goTo('decorate')}>
+          <Button size="lg" className="mt-4 h-12 text-base" onClick={() => goTo('decorate')}>
             꾸미러 가기
             <ArrowRight />
           </Button>
         ) : (
           <Button
             size="lg"
-            className="h-12 text-base"
+            className="mt-4 h-12 text-base"
             disabled={!canShoot}
             onClick={() => runSession()}
           >
@@ -495,7 +506,7 @@ const CAMERA_MESSAGES: Record<CameraStatus, string> = {
 function CameraState({ status, onRetry }: { status: CameraStatus; onRetry: () => void }) {
   const waiting = status === 'idle' || status === 'requesting'
   return (
-    <div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-4 bg-gray-12 p-8 text-center text-gray-1">
+    <div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-4 bg-stage p-8 text-center text-stage-ink">
       {waiting ? <LoaderCircle className="size-8 animate-spin" /> : <VideoOff className="size-8" />}
       <p className="max-w-sm text-base">{CAMERA_MESSAGES[status]}</p>
       {!waiting && (

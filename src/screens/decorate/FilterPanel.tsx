@@ -36,12 +36,12 @@ export default function FilterPanel({ firstShot, value }: { firstShot: ComposeSh
               aria-pressed={active}
               onClick={() => updateDecor({ colorFilter: f.id })}
               className={cn(
-                'flex flex-col gap-2 rounded-lg p-2 text-left text-sm text-gray-11 transition-colors hover:bg-gray-3',
-                active && 'bg-gray-3 font-semibold text-foreground',
+                'flex flex-col gap-2 rounded-lg p-2 text-left text-sm text-ink-2 transition-colors hover:bg-paper-3',
+                active && 'bg-paper-3 font-semibold text-foreground',
               )}
             >
               <span
-                className={cn('block aspect-square w-full overflow-hidden rounded-md bg-gray-3', active && 'ring-2 ring-foreground')}
+                className={cn('block aspect-square w-full overflow-hidden rounded-md bg-paper-3', active && 'ring-2 ring-foreground')}
               >
                 {thumbs[f.id] && <img src={thumbs[f.id]} alt="" className="size-full object-cover" />}
               </span>
