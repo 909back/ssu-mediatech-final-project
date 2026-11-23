@@ -22,3 +22,7 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Local design-tool files, not published
+.hallmark/
+docs/hallmark-brief.md
