@@ -144,13 +144,13 @@ export default function FrameScreen() {
         </AnimatePresence>
       </div>
 
-      <div className="flex min-w-0 flex-col py-2 lg:py-6">
+      <div className="flex min-w-0 flex-col py-2 lg:min-h-0 lg:pt-6 lg:pb-0">
         <h1 className="text-3xl font-extrabold tracking-tight text-ink">몇 컷 찍을까요?</h1>
 
         <div
           role="radiogroup"
           aria-label="프레임 종류"
-          className="mt-6 flex flex-col gap-2"
+          className="mt-6 flex flex-col gap-2 lg:min-h-0 lg:flex-1 lg:overflow-y-auto lg:p-1"
         >
           {OPTIONS.map((o, index) => {
             const layout = LAYOUTS[o.layoutId]
@@ -187,7 +187,7 @@ export default function FrameScreen() {
           })}
         </div>
 
-        <div className="mt-8 flex items-center justify-between gap-3">
+        <div className="mt-8 flex shrink-0 items-center justify-between gap-3 lg:mt-6">
           <Button variant="ghost" size="lg" className="h-12 px-5 text-base" onClick={() => goTo('start')}>
             <ArrowLeft />
             뒤로

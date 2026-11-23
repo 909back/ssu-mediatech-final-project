@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type ReactNode } from 'react'
+import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from 'react'
 import { motion, useReducedMotion } from 'motion/react'
 import { toast } from 'sonner'
 import { Download, Film, Images, Paintbrush, RotateCcw } from 'lucide-react'
@@ -111,17 +111,17 @@ export default function SaveScreen() {
   const stripW = Math.round(STRIP_MAX_H * aspect)
 
   return (
-    <section className="flex flex-col items-center gap-10 px-4 pb-6 lg:h-full lg:flex-row lg:justify-center lg:gap-24 lg:px-8 lg:pb-8">
+    <section className="flex flex-col items-center gap-10 px-4 pb-6 lg:h-full lg:flex-row lg:items-stretch lg:justify-center lg:gap-24 lg:px-8 lg:pb-8">
       {/* Hero: the print slides out of the booth slot. */}
-      <div className="flex max-w-full flex-col items-center" style={{ width: stripW + 40 }}>
+      <div className="flex w-(--strip-w) max-w-full flex-col items-center lg:w-auto lg:pt-6" style={{ '--strip-w': `${stripW + 40}px` } as CSSProperties}>
         <div aria-hidden className="h-4 w-full rounded-full bg-stage" />
-        <div className="-mt-2 w-full overflow-hidden px-5 pb-8">
+        <div className="-mt-2 w-full min-h-0 overflow-hidden px-5 pb-8 lg:flex-1">
           {stripUrl ? (
             <motion.img
               src={stripUrl}
               alt="완성된 네컷 사진"
               draggable={false}
-              className="block h-auto w-full rounded-[3px] shadow-(--shadow-card)"
+              className="block h-auto w-full rounded-[3px] shadow-(--shadow-card) lg:h-full lg:max-h-[600px] lg:w-auto"
               style={{ aspectRatio: `${layout.width} / ${layout.height}` }}
               initial={reduceMotion ? false : { y: '-100%', opacity: 0.4 }}
               animate={{ y: '0%', opacity: 1 }}
@@ -131,23 +131,21 @@ export default function SaveScreen() {
             <div
               role="status"
               aria-label="사진을 준비하고 있어요"
-              className="w-full rounded-[3px] bg-paper-3"
+              className="w-full rounded-[3px] bg-paper-3 lg:h-full lg:max-h-[600px] lg:w-auto"
               style={{ aspectRatio: `${layout.width} / ${layout.height}` }}
             />
           )}
         </div>
       </div>
 
-      <div className="flex w-full max-w-[340px] flex-col gap-6">
-        <div className="flex flex-col gap-1.5">
-          <h1 className="text-3xl font-extrabold tracking-tight text-ink">다 됐어요</h1>
-        </div>
+      <div className="flex w-full max-w-[340px] flex-col gap-6 lg:pt-6">
+        <h1 className="text-3xl font-extrabold tracking-tight text-ink">다 됐어요</h1>
 
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-4 lg:mt-auto">
           <ExportRow job={jobs.png}>
             <Button
               size="lg"
-              className="w-full"
+              className="h-12 w-full text-base"
               disabled={jobs.png.running || !stripUrl}
               onClick={() => run('png')}
             >

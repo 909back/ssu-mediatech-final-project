@@ -319,7 +319,8 @@ export default function ShootScreen() {
   }
 
   return (
-    <section className="flex flex-col gap-6 px-4 pb-6 lg:h-full lg:flex-row lg:gap-8 lg:px-8 lg:pb-8">
+    <section className="flex flex-col gap-6 px-4 pb-6 lg:h-full lg:px-8 lg:pb-8">
+      <div className="flex flex-col gap-6 lg:min-h-0 lg:flex-1 lg:flex-row lg:gap-8">
       {/* Hidden source video for p5 and ml5 (kept in layout so Chrome keeps decoding). */}
       <video
         ref={videoRef}
@@ -417,11 +418,7 @@ export default function ShootScreen() {
 
       {/* Right: frame + actions */}
       <aside className="flex shrink-0 flex-col gap-4 lg:w-[340px]">
-        <div className="flex items-center justify-between">
-          <Button variant="ghost" size="sm" onClick={onBack} className="-ml-2">
-            <ArrowLeft />
-            뒤로
-          </Button>
+        <div className="flex items-center justify-end">
           <span className="rounded-full bg-paper-2 px-3 py-1 text-sm font-semibold text-ink tabular-nums" aria-live="polite">
             {taken}/{shots.length}컷
           </span>
@@ -451,28 +448,37 @@ export default function ShootScreen() {
           </div>
         </div>
 
-        {review ? (
-          <Button size="lg" className="mt-4 h-12 text-base" onClick={() => goTo('decorate')}>
-            꾸미러 가기
-            <ArrowRight />
-          </Button>
-        ) : (
-          <Button
-            size="lg"
-            className="mt-4 h-12 text-base"
-            disabled={!canShoot}
-            onClick={() => runSession()}
-          >
-            {shooting ? <LoaderCircle className="animate-spin" /> : <Camera />}
-            {shooting ? '찍는 중' : '촬영 시작'}
-            {!shooting && (
-              <kbd className="ml-1 rounded border border-current/30 px-1.5 text-xs font-normal opacity-80">
-                Space
-              </kbd>
-            )}
-          </Button>
-        )}
       </aside>
+      </div>
+
+      {/* Bottom action bar: same place on every screen. */}
+      <div className="flex shrink-0 items-center justify-between gap-3">
+        <Button variant="ghost" size="lg" className="h-12 px-5 text-base" onClick={onBack}>
+          <ArrowLeft />
+          뒤로
+        </Button>
+        {review ? (
+            <Button size="lg" className="h-12 px-8 text-base" onClick={() => goTo('decorate')}>
+              꾸미러 가기
+              <ArrowRight />
+            </Button>
+          ) : (
+            <Button
+              size="lg"
+              className="h-12 px-8 text-base"
+              disabled={!canShoot}
+              onClick={() => runSession()}
+            >
+              {shooting ? <LoaderCircle className="animate-spin" /> : <Camera />}
+              {shooting ? '찍는 중' : '촬영 시작'}
+              {!shooting && (
+                <kbd className="ml-1 rounded border border-current/30 px-1.5 text-xs font-normal opacity-80">
+                  Space
+                </kbd>
+              )}
+            </Button>
+          )}
+      </div>
 
       <Dialog open={confirmBack} onOpenChange={setConfirmBack}>
         <DialogContent showCloseButton={false}>
