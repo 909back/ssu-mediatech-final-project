@@ -37,7 +37,7 @@ import {
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
 import { useCamera } from '@/hooks/useCamera'
 import type { FaceFilterId } from '@/lib/face'
-import { createHoldTracker, isOpenPalm, isVSign, type HandPrediction } from '@/lib/gesture'
+import { createHoldTracker, isOpenPalm, type HandPrediction } from '@/lib/gesture'
 import { cellAspect, cellRects } from '@/lib/layouts'
 import { prefersReducedMotion } from '@/lib/motion'
 import {
@@ -129,6 +129,8 @@ export default function ShootScreen() {
   const [cooling, setCooling] = useState(false)
   const session = useRef<{ cancelled: boolean } | null>(null)
   const cooldownUntil = useRef(0)
+  /** False after a gesture fires or a session ends, until the palm is lowered once. */
+  const gestureArmed = useRef(true)
   const review = allTaken && !shooting
 
   // --- p5 + clip ---
@@ -170,6 +172,7 @@ export default function ShootScreen() {
   /** Ignore gestures for GESTURE_COOLDOWN_MS (shows "잠시 쉬는 중"). */
   const startCooldown = useCallback(() => {
     cooldownUntil.current = performance.now() + GESTURE_COOLDOWN_MS
+    gestureArmed.current = false
     setCooling(true)
     clearTimeout(cooldownTimer.current)
     cooldownTimer.current = setTimeout(() => setCooling(false), GESTURE_COOLDOWN_MS)
@@ -263,7 +266,17 @@ export default function ShootScreen() {
         return
       }
       const inReview = selectAllShotsTaken(useApp.getState())
-      const active = !!hand && (inReview ? isOpenPalm(hand) : isVSign(hand))
+      // Open palm is the one "next" gesture: start shooting in ready, decorate in review.
+      const active = !!hand && isOpenPalm(hand)
+      // A palm still up from the last trigger must come down before it counts again,
+      // so one long hold can't start shooting and then also skip review.
+      if (!gestureArmed.current) {
+        if (active) {
+          resetHold()
+          return
+        }
+        gestureArmed.current = true
+      }
       const { progress, fired } = hold.update(active, now)
       const at = hand && !fired ? handInPreview(hand, videoEl.current, previewRef.current) : null
       setHandView(at && { ...at, active, progress })
@@ -366,7 +379,7 @@ export default function ShootScreen() {
           <HandFeedback
             status={gestureStatus}
             hand={handNeeded ? handView : null}
-            hint={review ? '손바닥을 펴 보세요' : '브이를 만들어 보세요'}
+            hint="손바닥을 펴 보세요"
           />
 
           {!cameraReady && <CameraState status={cameraStatus} onRetry={retry} />}
