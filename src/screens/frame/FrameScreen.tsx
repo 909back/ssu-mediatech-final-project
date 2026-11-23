@@ -2,9 +2,7 @@ import { useRef, useState, type KeyboardEvent } from 'react'
 import { motion, useReducedMotion } from 'motion/react'
 import { ArrowLeft, ArrowRight } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { Switch } from '@/components/ui/switch'
-import { Label } from '@/components/ui/label'
-import { LAYOUTS, LAYOUT_IDS, cellRects, shotCount, type Layout, type LayoutId } from '@/lib/layouts'
+import { LAYOUTS, cellRects, shotCount, type Layout, type LayoutId } from '@/lib/layouts'
 import { cn } from '@/lib/utils'
 import { useApp } from '@/store/useApp'
 
@@ -15,7 +13,23 @@ const SAMPLES = [
   '/brand/sample-hug.jpg',
 ]
 
-const PREVIEW_HEIGHT = 340
+const PREVIEW_HEIGHT = 320
+
+/** One selectable card. The 2x4 layout appears twice: shots repeated, or eight different shots. */
+type Option = {
+  key: string
+  layoutId: LayoutId
+  eight: boolean
+  name: string
+  hint: string
+}
+
+const OPTIONS: Option[] = [
+  { key: '1x4', layoutId: '1x4', eight: false, name: '1x4 스트립', hint: '세로 한 줄' },
+  { key: '2x3', layoutId: '2x3', eight: false, name: '2x3 그리드', hint: '6장 모두 다른 사진' },
+  { key: '2x4-4', layoutId: '2x4', eight: false, name: '2x4 그리드', hint: '같은 사진이 두 줄로' },
+  { key: '2x4-8', layoutId: '2x4', eight: true, name: '2x4 그리드', hint: '8장 모두 다른 사진' },
+]
 
 /** True-proportion mini frame. Cells are placed in percent so it scales with the box. */
 type PreviewProps = {
@@ -57,26 +71,29 @@ export default function FrameScreen() {
   const setLayout = useApp((s) => s.setLayout)
   const setEightShotMode = useApp((s) => s.setEightShotMode)
 
-  const [selected, setSelected] = useState<LayoutId>(storedLayoutId as LayoutId)
-  const [eight, setEight] = useState(storedEight)
-  const radios = useRef<Partial<Record<LayoutId, HTMLButtonElement | null>>>({})
+  const initialKey = OPTIONS.find(
+    (o) => o.layoutId === storedLayoutId && (o.layoutId !== '2x4' || o.eight === storedEight)
+  )?.key
+  const [selected, setSelected] = useState<string>(initialKey ?? OPTIONS[0].key)
+  const radios = useRef<Record<string, HTMLButtonElement | null>>({})
   const reduce = useReducedMotion()
 
   const confirm = () => {
-    const nextEight = selected === '2x4' && eight
+    const opt = OPTIONS.find((o) => o.key === selected) ?? OPTIONS[0]
+    const nextEight = opt.layoutId === '2x4' && opt.eight
     // Setters clear the shots, so only call them when something changed.
-    if (selected !== storedLayoutId) setLayout(selected)
+    if (opt.layoutId !== storedLayoutId) setLayout(opt.layoutId)
     if (nextEight !== storedEight) setEightShotMode(nextEight)
     goTo('shoot')
   }
 
-  const move = (id: LayoutId) => {
-    setSelected(id)
-    radios.current[id]?.focus()
+  const move = (key: string) => {
+    setSelected(key)
+    radios.current[key]?.focus()
   }
 
   const onRadioKeyDown = (e: KeyboardEvent<HTMLButtonElement>, index: number) => {
-    const last = LAYOUT_IDS.length - 1
+    const last = OPTIONS.length - 1
     let target: number | null = null
     if (e.key === 'ArrowRight' || e.key === 'ArrowDown') target = index === last ? 0 : index + 1
     else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') target = index === 0 ? last : index - 1
@@ -89,7 +106,7 @@ export default function FrameScreen() {
     }
     if (target !== null) {
       e.preventDefault()
-      move(LAYOUT_IDS[target])
+      move(OPTIONS[target].key)
     }
   }
 
@@ -115,68 +132,47 @@ export default function FrameScreen() {
         role="radiogroup"
         aria-label="프레임 종류"
         aria-describedby="frame-help"
-        className="mx-auto mt-6 grid w-full max-w-[1080px] flex-1 grid-cols-3 gap-6 place-content-center"
+        className="mx-auto mt-6 grid w-full max-w-[1120px] flex-1 grid-cols-4 gap-4 place-content-center"
       >
-        {LAYOUT_IDS.map((id, index) => {
-          const layout = LAYOUTS[id]
-          const isSelected = selected === id
-          const is24 = id === '2x4'
-          const count = shotCount(layout, is24 && eight)
+        {OPTIONS.map((opt, index) => {
+          const layout = LAYOUTS[opt.layoutId]
+          const isSelected = selected === opt.key
+          const count = shotCount(layout, opt.eight)
           return (
-            <motion.div key={id} className="flex flex-col gap-3" {...enter(index * 0.06)}>
+            <motion.div key={opt.key} {...enter(index * 0.06)}>
               <motion.button
                 type="button"
                 role="radio"
                 aria-checked={isSelected}
                 tabIndex={isSelected ? 0 : -1}
                 ref={(el) => {
-                  radios.current[id] = el
+                  radios.current[opt.key] = el
                 }}
-                onClick={() => setSelected(id)}
+                onClick={() => setSelected(opt.key)}
                 onKeyDown={(e) => onRadioKeyDown(e, index)}
                 whileHover={reduce ? undefined : { y: -4 }}
                 animate={reduce ? undefined : { scale: isSelected ? 1 : 0.97 }}
                 transition={{ duration: 0.2, ease: 'easeOut' as const }}
                 className={cn(
-                  'flex w-full cursor-pointer flex-col items-center gap-5 rounded-2xl bg-gray-2 px-6 pt-7 pb-6 outline-none',
+                  'flex w-full cursor-pointer flex-col items-center gap-5 rounded-2xl bg-gray-2 px-4 pt-7 pb-6 outline-none',
                   'ring-1 ring-gray-6 transition-shadow hover:ring-gray-8',
                   'focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ring',
                   isSelected && 'bg-card ring-2 ring-foreground hover:ring-foreground'
                 )}
               >
-                <FramePreview layout={layout} eightShotMode={is24 && eight} />
+                <FramePreview layout={layout} eightShotMode={opt.eight} />
                 <span className="flex flex-col items-center gap-1">
-                  <span className="text-lg font-semibold">{layout.name}</span>
-                  <span className="text-base text-muted-foreground">
-                    {count}컷
-                  </span>
+                  <span className="text-lg font-semibold">{opt.name}</span>
+                  <span className="text-base font-medium">{count}컷</span>
+                  <span className="text-sm text-muted-foreground">{opt.hint}</span>
                 </span>
               </motion.button>
-
-              <div className="flex h-8 items-center justify-center">
-                {is24 && (
-                  <div className="flex items-center gap-2">
-                    <Switch
-                      id="eight-shot"
-                      checked={eight}
-                      onCheckedChange={(v: boolean) => {
-                        setEight(v)
-                        setSelected('2x4')
-                      }}
-                      className="data-[state=checked]:bg-foreground"
-                    />
-                    <Label htmlFor="eight-shot" className="cursor-pointer text-base">
-                      8컷으로 찍기
-                    </Label>
-                  </div>
-                )}
-              </div>
             </motion.div>
           )
         })}
       </div>
 
-      <div className="mx-auto flex w-full max-w-[1080px] items-center justify-between">
+      <div className="mx-auto flex w-full max-w-[1120px] items-center justify-between">
         <Button variant="ghost" size="lg" className="h-12 px-5 text-base" onClick={() => goTo('start')}>
           <ArrowLeft />
           뒤로
