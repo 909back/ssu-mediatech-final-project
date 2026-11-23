@@ -68,7 +68,7 @@ flowchart LR
 
 ### 4. Decorate (`decorate`)
 Canvas preview of the composed frame in the center; tool panel on the right with tabs:
-- 프레임: color (8 presets + picker), background image, preset themes (기본, 도토리 숲, 숭실대 캠퍼스, 레트로 픽셀).
+- 프레임: color (8 presets + picker), background image, preset themes (기본, 도토리 숲, 숭실대 캠퍼스, 레트로 픽셀, 가을 낙엽), drawn from illustrated frame images in public/frames/ (procedural fallback if an image fails to load).
 - 필터: 4 color filters, applied to all shots.
 - 스티커: upload image → auto background removal (tolerance slider 0–120) → move, resize, rotate, layer order, delete (Delete key).
 - 글자: date stamp on/off, custom text (auto black/white contrast).
@@ -100,3 +100,8 @@ Canvas preview of the composed frame in the center; tool panel on the right with
 ## v3 changes (requested by user 2026-11-23)
 9. New screen `guide` (사용법) between Frame select and Shoot: Start → Frame → Guide → Shoot. It's a full page with two illustrated steps: the V-sign character and "브이 하면 바로 찍어요", then the open-palm character and "손바닥을 펴면 꾸미러 가요". It also mentions that the button or Space works. One primary button "촬영하러 가기" (Space works too), plus a back button. It shows on every new session, because each booth visitor is new; going back from Shoot to Frame and forward again skips it. Illustrations: public/brand/guide/gesture-vsign.png and gesture-palm.png.
 10. Because the guide page teaches the gestures, Shoot and Review drop their instruction lines ("브이 하면 바로 찍어요", "버튼이나 스페이스 바도 돼요", "손바닥을 펴면 꾸미러 가요"). What stays on the preview is only live status: "손 인식 준비 중", the hint near a seen hand, the 1 s ring, and "잠시만요". A small "사용법" link on Shoot reopens the guide.
+
+## v4 changes (approved by user 2026-11-23)
+11. One gesture for "next": the open palm held 1 s. In ready it STARTS the shooting sequence (replaces the V-sign trigger). In review it goes to Decorate, as before. The V-sign is no longer a trigger anywhere, so people can pose with V freely. Button and Space still work. Gestures stay paused during countdown and cooldown.
+12. Guide page shows one step: the open-palm illustration (public/brand/guide/gesture-palm.png) with "손바닥을 펴면 시작해요", plus the one note line. The V-sign illustration is no longer used there.
+13. Hand hints on the preview: in ready, a hand that isn't an open palm gets "손바닥을 펴 보세요" (same as review). The ring fills on the open palm in both states.

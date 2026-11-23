@@ -8,8 +8,7 @@ const ILLUSTRATION_SIZE = 360
 const RETRY_MS = 2000
 
 const STEPS = [
-  { src: '/brand/guide/gesture-vsign.png', alt: '브이를 하는 다람쥐', text: '브이 하면 바로 찍어요' },
-  { src: '/brand/guide/gesture-palm.png', alt: '손바닥을 편 다람쥐', text: '손바닥을 펴면 꾸미러 가요' },
+  { src: '/brand/guide/gesture-palm.png', alt: '손바닥을 편 다람쥐', text: '손바닥을 펴면 시작해요' },
 ]
 
 /**
@@ -109,21 +108,13 @@ export default function GuideScreen() {
         {STEPS.map((step, i) => (
           <motion.li key={step.src} className="flex flex-col items-center gap-5" {...enter(0.08 + i * 0.08)}>
             <Illustration src={step.src} alt={step.alt} />
-            <p className="flex items-center gap-3 text-2xl font-semibold text-ink">
-              <span
-                aria-hidden
-                className="flex size-8 items-center justify-center rounded-full bg-paper-3 text-base font-semibold tabular-nums text-ink-2"
-              >
-                {i + 1}
-              </span>
-              {step.text}
-            </p>
+            <p className="text-2xl font-semibold text-ink">{step.text}</p>
           </motion.li>
         ))}
       </ol>
 
       <motion.p className="text-center text-base text-ink-2" {...enter(0.24)}>
-        브이 대신 버튼이나 스페이스 바로 찍어도 돼요.
+        손바닥 대신 버튼이나 스페이스 바로 찍어도 돼요.
       </motion.p>
 
       <div className="mt-6 flex w-full shrink-0 items-center justify-between gap-3">

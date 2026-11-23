@@ -24,7 +24,7 @@ export type Screen = FlowScreen | 'guide'
 
 export type CameraStatus = 'idle' | 'requesting' | 'ready' | 'denied' | 'notfound' | 'error'
 export type FaceFilter = 'none' | 'dog' | 'glasses' | 'blush'
-export type ThemeId = 'basic' | 'forest' | 'campus' | 'retro'
+export type ThemeId = 'basic' | 'forest' | 'campus' | 'retro' | 'autumn'
 
 /** One frame of a shot's motion clip. Shoot picks the format; compose/export accept all three. */
 export type ClipFrame = string | ImageBitmap | HTMLCanvasElement

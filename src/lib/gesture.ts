@@ -3,11 +3,10 @@
  *
  *   const hands = await loadHandPose()            // ml5 handPose, cached
  *   const [hand] = await hands.detect(video)
- *   if (hand && isVSign(hand)) ...                // V sign = start shooting
- *   if (hand && isOpenPalm(hand)) ...             // open palm = next step
+ *   if (hand && isOpenPalm(hand)) ...             // open palm = next (start / decorate)
  *
  *   const hold = createHoldTracker(1000)          // must hold 1 s
- *   const { progress, fired } = hold.update(isVSign(hand), performance.now())
+ *   const { progress, fired } = hold.update(isOpenPalm(hand), performance.now())
  *
  * Finger checks compare distances from the wrist, so they work whatever way
  * the hand is turned: a straight finger's tip is farther from the wrist than
@@ -87,7 +86,8 @@ function palmSize(hand: HandPrediction): number {
 
 /**
  * V sign: index and middle straight and spread apart, ring and pinky bent.
- * The thumb is ignored (people hold it in many ways).
+ * The thumb is ignored (people hold it in many ways). Not a trigger any more
+ * (people pose with V freely); kept for reference.
  */
 export function isVSign(hand: HandPrediction): boolean {
   if (!hand?.keypoints || hand.keypoints.length < 21) return false
