@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/jpeg" href="/brand/logo-character.jpg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>도토리 네컷</title>
+    <!-- ml5 is NOT loaded here on purpose. src/lib/ml5.ts injects the pinned
+         script (ml5@1.3.1) on demand so the Start screen paints fast and
+         a load failure can be shown as an error state. -->
+    <link rel="preconnect" href="https://unpkg.com" crossorigin />
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

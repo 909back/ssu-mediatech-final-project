@@ -1,0 +1,129 @@
+/* Owned by foundation. Stage agents: do not edit; ask via docs/architecture.md rules. */
+@import "tailwindcss";
+@import "tw-animate-css";
+/* Exact Radix custom export for #7B481E (light only). To update, paste a new
+   export into this file; keep the --brand-* and --gray-* names. */
+@import "./styles/radix-palette.css";
+@import "./styles/fonts.css";
+
+/* Light-only app for now: no dark palette was exported, so there is no .dark block. */
+
+@theme inline {
+  --font-sans: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  /* Raw scales as utilities: bg-brand-3, text-gray-11, border-brand-a6 ... */
+  --color-brand-1: var(--brand-1);
+  --color-brand-2: var(--brand-2);
+  --color-brand-3: var(--brand-3);
+  --color-brand-4: var(--brand-4);
+  --color-brand-5: var(--brand-5);
+  --color-brand-6: var(--brand-6);
+  --color-brand-7: var(--brand-7);
+  --color-brand-8: var(--brand-8);
+  --color-brand-9: var(--brand-9);
+  --color-brand-10: var(--brand-10);
+  --color-brand-11: var(--brand-11);
+  --color-brand-12: var(--brand-12);
+  --color-gray-1: var(--gray-1);
+  --color-gray-2: var(--gray-2);
+  --color-gray-3: var(--gray-3);
+  --color-gray-4: var(--gray-4);
+  --color-gray-5: var(--gray-5);
+  --color-gray-6: var(--gray-6);
+  --color-gray-7: var(--gray-7);
+  --color-gray-8: var(--gray-8);
+  --color-gray-9: var(--gray-9);
+  --color-gray-10: var(--gray-10);
+  --color-gray-11: var(--gray-11);
+  --color-gray-12: var(--gray-12);
+  --color-gray-a3: var(--gray-a3);
+  --color-gray-a6: var(--gray-a6);
+  --color-gray-a12: var(--gray-a12);
+}
+
+/* shadcn semantic tokens mapped onto the Radix scales.
+   Rule: brand (accent) only on primary actions / main-flow CTA.
+   Selected states elsewhere use foreground (gray-12), not brand. */
+:root {
+  --radius: 0.75rem;
+
+  --background: #fff;
+  --foreground: var(--gray-12);
+  --card: #fff;
+  --card-foreground: var(--gray-12);
+  --popover: #fff;
+  --popover-foreground: var(--gray-12);
+
+  --primary: var(--brand-9);
+  --primary-foreground: var(--brand-contrast);
+
+  --secondary: var(--gray-3);
+  --secondary-foreground: var(--gray-12);
+  --muted: var(--gray-3);
+  --muted-foreground: var(--gray-11);
+  /* shadcn "accent" = neutral hover surface, NOT the brand color. */
+  --accent: var(--gray-4);
+  --accent-foreground: var(--gray-12);
+
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: var(--gray-6);
+  --input: var(--gray-7);
+  --ring: var(--brand-8);
+
+  /* App shell sizes (target viewport 1280x800). */
+  --header-h: 56px;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  html {
+    color-scheme: light;
+  }
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    min-width: 1024px;
+    word-break: keep-all;
+  }
+  /* Every interactive element gets a visible focus style, even unstyled ones. */
+  :where(a, button, [role="button"], input, select, textarea, [tabindex]:not([tabindex="-1"])):focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+  }
+}
+
+/* Motion rule: animate transform/opacity only. Honour reduced motion globally;
+   JS animations must also check prefersReducedMotion() from @/lib/motion. */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

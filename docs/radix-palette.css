@@ -1,0 +1,41 @@
+/* Radix custom palette, accent #7B481E, light mode only.
+   Source: https://www.radix-ui.com/colors/custom?accent-light=7B481E (exported 2026-11-23)
+   Renamed orange -> brand. Dark mode not exported yet. */
+:root, .light, .light-theme {
+  --brand-1: #fefdfc; --brand-2: #fef8f4; --brand-3: #fbede3; --brand-4: #f7e2d3;
+  --brand-5: #f4d6c1; --brand-6: #f1c9ac; --brand-7: #ecb68f; --brand-8: #e19b65;
+  --brand-9: #7b481e; --brand-10: #6b390b; --brand-11: #8d582f; --brand-12: #413228;
+  --brand-a1: #aa550003; --brand-a2: #e85d000b; --brand-a3: #db5c001c; --brand-a4: #d157002c;
+  --brand-a5: #d257003e; --brand-a6: #d45a0053; --brand-a7: #d4590070; --brand-a8: #ce5a009a;
+  --brand-a9: #693000e1; --brand-a10: #643000f4; --brand-a11: #733200d0; --brand-a12: #1e0c00d7;
+  --brand-contrast: #fff; --brand-surface: #fef6f1cc;
+
+  --gray-1: #fcfcfd; --gray-2: #f9f9fb; --gray-3: #eff0f3; --gray-4: #e7e8ec;
+  --gray-5: #e0e1e6; --gray-6: #d8d9e0; --gray-7: #cdced7; --gray-8: #b9bbc6;
+  --gray-9: #8b8d98; --gray-10: #80828d; --gray-11: #62636c; --gray-12: #1e1f24;
+  --gray-a1: #00005503; --gray-a2: #00005506; --gray-a3: #00104010; --gray-a4: #000b3618;
+  --gray-a5: #0009321f; --gray-a6: #00073527; --gray-a7: #00063332; --gray-a8: #00083046;
+  --gray-a9: #00051d74; --gray-a10: #00051b7f; --gray-a11: #0002119d; --gray-a12: #000107e1;
+  --gray-contrast: #fff; --gray-surface: #ffffffcc;
+
+  --color-background: #fff;
+}
+
+@supports (color: color(display-p3 1 1 1)) {
+  @media (color-gamut: p3) {
+    :root, .light, .light-theme {
+      --brand-1: oklch(99.4% 0.0023 57.03); --brand-2: oklch(98.3% 0.0089 57.03);
+      --brand-3: oklch(95.4% 0.0195 57.03); --brand-4: oklch(92.6% 0.031 57.03);
+      --brand-5: oklch(89.7% 0.0438 57.03); --brand-6: oklch(86.2% 0.0597 57.03);
+      --brand-7: oklch(81.5% 0.0812 57.03); --brand-8: oklch(74.7% 0.1096 57.03);
+      --brand-9: oklch(45.4% 0.0892 57.03); --brand-10: oklch(40% 0.0892 57.03);
+      --brand-11: oklch(51.2% 0.0892 57.03); --brand-12: oklch(33.2% 0.0276 57.03);
+      --gray-1: oklch(99.1% 0.0015 277.7); --gray-2: oklch(98.2% 0.003 277.7);
+      --gray-3: oklch(95.6% 0.0045 277.7); --gray-4: oklch(93.1% 0.0061 277.7);
+      --gray-5: oklch(91% 0.0077 277.7); --gray-6: oklch(88.8% 0.0093 277.7);
+      --gray-7: oklch(85.3% 0.0117 277.7); --gray-8: oklch(79.4% 0.016 277.7);
+      --gray-9: oklch(64.6% 0.0165 277.7); --gray-10: oklch(61% 0.0161 277.7);
+      --gray-11: oklch(50.3% 0.0139 277.7); --gray-12: oklch(24.1% 0.0099 277.7);
+    }
+  }
+}
