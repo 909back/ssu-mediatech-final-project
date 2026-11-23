@@ -28,6 +28,10 @@ const buttonVariants = cva(
         "icon-xs": "size-6 rounded-md [&_svg:not([class*='size-'])]:size-3",
         "icon-sm": "size-8",
         "icon-lg": "size-10",
+        // Screen-level actions (bottom action bar). has-[>svg] keeps an icon from shrinking it much.
+        action: "h-12 gap-2 rounded-md px-9 text-base has-[>svg]:px-8",
+        // The one big call to action on Start (and its retry).
+        hero: "h-16 gap-3 rounded-full px-14 text-xl font-semibold has-[>svg]:px-12",
       },
     },
     defaultVariants: {

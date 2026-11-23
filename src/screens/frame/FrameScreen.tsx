@@ -190,11 +190,11 @@ export default function FrameScreen() {
         </div>
 
         <div className="mt-8 flex shrink-0 items-center justify-between gap-3 lg:mt-6">
-          <Button variant="ghost" size="lg" className="h-12 px-5 text-base" onClick={() => goTo('start')}>
+          <Button variant="ghost" size="action" onClick={() => goTo('start')}>
             <ArrowLeft />
             뒤로
           </Button>
-          <Button size="lg" className="h-12 px-8 text-base" onClick={confirm}>
+          <Button size="action" onClick={confirm}>
             다음
             <ArrowRight />
           </Button>

@@ -127,11 +127,11 @@ export default function StartScreen() {
             <>
               <Button
                 ref={startRef}
-                size="lg"
+                size="hero"
                 aria-disabled={busy}
                 aria-busy={busy}
                 onClick={handleStart}
-                className="h-16 w-fit rounded-full px-12 text-xl font-semibold"
+                className="w-fit"
               >
                 {busy ? (
                   <Loader2 aria-hidden className="size-6 animate-spin" />

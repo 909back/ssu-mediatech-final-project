@@ -144,8 +144,8 @@ export default function SaveScreen() {
         <div className="flex flex-col gap-4 lg:mt-auto">
           <ExportRow job={jobs.png}>
             <Button
-              size="lg"
-              className="h-12 w-full text-base"
+              size="action"
+              className="w-full"
               disabled={jobs.png.running || !stripUrl}
               onClick={() => run('png')}
             >

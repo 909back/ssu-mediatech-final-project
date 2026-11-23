@@ -504,19 +504,18 @@ export default function ShootScreen() {
 
       {/* Bottom action bar: same place on every screen. */}
       <div className="flex shrink-0 items-center justify-between gap-3">
-        <Button variant="ghost" size="lg" className="h-12 px-5 text-base" onClick={onBack}>
+        <Button variant="ghost" size="action" onClick={onBack}>
           <ArrowLeft />
           뒤로
         </Button>
         {review ? (
-            <Button size="lg" className="h-12 px-8 text-base" onClick={() => goTo('decorate')}>
+            <Button size="action" onClick={() => goTo('decorate')}>
               꾸미러 가기
               <ArrowRight />
             </Button>
           ) : (
             <Button
-              size="lg"
-              className="h-12 px-8 text-base"
+              size="action"
               disabled={!canShoot}
               onClick={() => runSession()}
             >

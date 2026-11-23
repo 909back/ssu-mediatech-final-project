@@ -73,18 +73,17 @@ export default function StartError({ kind, busy = false, onRetry }: Props) {
       </div>
       <Button
         ref={retryRef}
-        size="lg"
+        size="hero"
         aria-disabled={busy}
         aria-busy={busy}
         onClick={() => {
           if (!busy) onRetry()
         }}
-        className="h-14 rounded-full px-8 text-lg font-semibold"
       >
         {busy ? (
-          <Loader2 aria-hidden className="size-5 animate-spin" />
+          <Loader2 aria-hidden className="size-6 animate-spin" />
         ) : (
-          <RefreshCw aria-hidden className="size-5" />
+          <RefreshCw aria-hidden className="size-6" />
         )}
         {busy ? '다시 연결하는 중' : '다시 시도'}
       </Button>

@@ -118,11 +118,11 @@ export default function GuideScreen() {
       </motion.p>
 
       <div className="mt-6 flex w-full shrink-0 items-center justify-between gap-3">
-        <Button variant="ghost" size="lg" className="h-12 px-5 text-base" onClick={() => leave('frame')}>
+        <Button variant="ghost" size="action" onClick={() => leave('frame')}>
           <ArrowLeft />
           뒤로
         </Button>
-        <Button ref={startRef} size="lg" className="h-12 px-8 text-base" onClick={() => leave('shoot')}>
+        <Button ref={startRef} size="action" onClick={() => leave('shoot')}>
           <Camera />
           촬영하러 가기
         </Button>
