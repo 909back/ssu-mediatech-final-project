@@ -13,6 +13,7 @@ import {
   type PreparedCutout,
 } from '@/lib/cutout'
 import { PanelSection, UNSUPPORTED_MESSAGE } from './PanelSection'
+import { DEFAULT_STICKERS } from './defaultStickers'
 import { BUILTIN_STICKERS } from './stickers'
 
 interface Props {
@@ -75,6 +76,22 @@ export default function StickerPanel({ onAdd }: Props) {
               aria-label={`${s.label} 붙이기`}
               onClick={() => void addBuiltin(s.src)}
               className="flex aspect-square items-center justify-center rounded-lg bg-paper-2 p-2 ring-1 ring-rule transition-[transform,background-color] hover:scale-[1.03] hover:bg-paper-3"
+            >
+              <img src={s.src} alt="" className="max-h-full max-w-full object-contain" />
+            </button>
+          ))}
+        </div>
+      </PanelSection>
+
+      <PanelSection title="기본 스티커">
+        <div className="grid grid-cols-4 gap-2">
+          {DEFAULT_STICKERS.map((s) => (
+            <button
+              key={s.src}
+              type="button"
+              aria-label={s.label}
+              onClick={() => void addBuiltin(s.src)}
+              className="flex aspect-square cursor-pointer items-center justify-center rounded-lg bg-paper-2 p-2 ring-1 ring-rule transition-[transform,background-color] hover:scale-[1.03] hover:bg-paper-3 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
             >
               <img src={s.src} alt="" className="max-h-full max-w-full object-contain" />
             </button>
