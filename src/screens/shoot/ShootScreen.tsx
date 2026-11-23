@@ -182,7 +182,7 @@ export default function ShootScreen() {
     hold.reset()
     setHandView(null)
   }, [hold])
-  /** Ignore gestures for GESTURE_COOLDOWN_MS (shows "잠시 쉬는 중"). */
+  /** Ignore gestures for GESTURE_COOLDOWN_MS (shows "잠시만요"). */
   const startCooldown = useCallback(() => {
     cooldownUntil.current = performance.now() + GESTURE_COOLDOWN_MS
     gestureArmed.current = false
@@ -554,9 +554,9 @@ const CAMERA_MESSAGES: Record<CameraStatus, string> = {
   idle: '카메라를 켜는 중이에요',
   requesting: '카메라를 켜는 중이에요',
   ready: '',
-  denied: '카메라 권한이 막혀 있어요. 주소창 옆 카메라 아이콘에서 허용해 주세요.',
+  denied: '카메라 사용이 막혀 있어요. 주소창 왼쪽 아이콘에서 카메라를 허용해 주세요.',
   notfound: '카메라를 찾지 못했어요. 연결을 확인해 주세요.',
-  error: '카메라를 켜지 못했어요. 다른 앱이 쓰고 있는지 확인해 주세요.',
+  error: '카메라를 켤 수 없어요. 다른 앱이나 탭이 쓰고 있는지 확인해 주세요.',
 }
 
 function CameraState({ status, onRetry }: { status: CameraStatus; onRetry: () => void }) {

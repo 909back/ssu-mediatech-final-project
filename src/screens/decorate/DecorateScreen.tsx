@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { ArrowDownToLine, ArrowUpToLine, ChevronLeft, Trash2 } from 'lucide-react'
+import { ArrowDownToLine, ArrowLeft, ArrowRight, ArrowUpToLine, Trash2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import type { ComposeShot } from '@/lib/compose'
@@ -96,7 +96,8 @@ export default function DecorateScreen() {
   const rank = selected ? order.findIndex((s) => s.id === selected.id) : -1
 
   return (
-    <section className="flex flex-col gap-6 px-4 pb-6 lg:h-full lg:flex-row lg:gap-8 lg:px-8 lg:pb-8">
+    <section className="flex flex-col gap-6 px-4 pb-6 lg:h-full lg:px-8 lg:pb-8">
+      <div className="flex min-h-0 flex-1 flex-col gap-6 lg:flex-row lg:gap-8">
       <div className="flex h-[640px] min-w-0 shrink-0 flex-col overflow-hidden rounded-(--radius-card) bg-paper-2 lg:h-auto lg:flex-1">
         <div className="flex min-h-0 flex-1 px-8 pt-14 pb-2">
           <DecoratePreview
@@ -109,11 +110,7 @@ export default function DecorateScreen() {
             onChangeSticker={updateSticker as (id: string, patch: Partial<Sticker>) => void}
           />
         </div>
-        <div className="flex h-16 shrink-0 items-center justify-between gap-4 px-6">
-          <Button variant="ghost" onClick={() => goTo('shoot')}>
-            <ChevronLeft />
-            뒤로
-          </Button>
+        <div className="flex h-16 shrink-0 items-center justify-center gap-4 px-6">
           {selected ? (
             <div className="flex items-center gap-1 rounded-full bg-card p-1 shadow-(--shadow-card)">
               <Button variant="ghost" size="sm" disabled={rank >= order.length - 1} onClick={() => reorder(1)}>
@@ -129,10 +126,7 @@ export default function DecorateScreen() {
                 삭제
               </Button>
             </div>
-          ) : (
-            <span aria-hidden />
-          )}
-          <span aria-hidden className="w-18" />
+          ) : null}
         </div>
       </div>
 
@@ -161,12 +155,20 @@ export default function DecorateScreen() {
             </TabsContent>
           </div>
         </Tabs>
-        <div className="pt-4">
-          <Button size="lg" className="h-12 w-full text-base" onClick={() => goTo('save')}>
-            저장하기
-          </Button>
-        </div>
       </aside>
+      </div>
+
+      {/* Bottom action bar: same place on every screen. */}
+      <div className="flex shrink-0 items-center justify-between gap-3">
+        <Button variant="ghost" size="action" onClick={() => goTo('shoot')}>
+          <ArrowLeft />
+          뒤로
+        </Button>
+        <Button size="action" onClick={() => goTo('save')}>
+          저장하기
+          <ArrowRight />
+        </Button>
+      </div>
     </section>
   )
 }

@@ -34,6 +34,11 @@ const buttonVariants = cva(
         hero: "h-16 gap-3 rounded-full px-14 text-xl font-semibold has-[>svg]:px-12",
       },
     },
+    compoundVariants: [
+      // A ghost 뒤로 in the action bar keeps a small hit area and pulls its text flush with the
+      // left-aligned title above it.
+      { variant: "ghost", size: "action", class: "-ml-3 px-3 has-[>svg]:px-3" },
+    ],
     defaultVariants: {
       variant: "default",
       size: "default",

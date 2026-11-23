@@ -169,7 +169,7 @@ export default function SaveScreen() {
 
           <ExportRow
             job={jobs.webm}
-            note="일부 앱에서는 WebM이 재생되지 않아요. 공유할 때는 GIF를 쓰세요."
+            note="일부 앱에서는 WebM이 재생되지 않아요. 공유할 때는 GIF가 좋아요."
           >
             <Button
               variant="outline"
@@ -208,7 +208,7 @@ export default function SaveScreen() {
           </DialogHeader>
           <DialogFooter>
             <DialogClose asChild>
-              <Button variant="outline">취소</Button>
+              <Button variant="outline">계속하기</Button>
             </DialogClose>
             <Button variant="destructive" onClick={startOver}>
               처음부터

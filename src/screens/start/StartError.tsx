@@ -12,7 +12,7 @@ const COPY: Record<StartErrorKind, Copy> = {
     Icon: CameraOff,
     title: '카메라 사용이 막혀 있어요',
     steps: [
-      '주소창 왼쪽의 설정 아이콘을 눌러 주세요.',
+      '주소창 왼쪽 아이콘을 눌러 주세요.',
       "카메라를 '허용'으로 바꿔 주세요.",
       '아래 버튼을 눌러 다시 시도해 주세요.',
     ],
@@ -35,10 +35,10 @@ const COPY: Record<StartErrorKind, Copy> = {
   },
   model: {
     Icon: TriangleAlert,
-    title: '얼굴 인식 모델을 불러오지 못했어요',
+    title: '손과 얼굴 인식을 불러오지 못했어요',
     steps: [
       '인터넷 연결을 확인해 주세요.',
-      '연결이 되면 아래 버튼을 눌러 주세요.',
+      '연결한 뒤 아래 버튼을 눌러 주세요.',
     ],
   },
 }

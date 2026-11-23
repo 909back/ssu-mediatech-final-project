@@ -15,7 +15,7 @@ export type ColorFilterId = 'none' | 'mono' | 'warm' | 'film'
 export const COLOR_FILTERS: { id: ColorFilterId; label: string }[] = [
   { id: 'none', label: '원본' },
   { id: 'mono', label: '흑백' },
-  { id: 'warm', label: '따뜻하게' },
+  { id: 'warm', label: '웜톤' },
   { id: 'film', label: '필름' },
 ]
 
