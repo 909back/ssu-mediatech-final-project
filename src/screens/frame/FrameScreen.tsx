@@ -2,7 +2,7 @@ import { useRef, useState, type KeyboardEvent } from 'react'
 import { motion, useReducedMotion } from 'motion/react'
 import { ArrowLeft, ArrowRight } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { LAYOUTS, cellRects, shotCount, type Layout, type LayoutId } from '@/lib/layouts'
+import { LAYOUTS, cellRects, type Layout, type LayoutId } from '@/lib/layouts'
 import { cn } from '@/lib/utils'
 import { useApp } from '@/store/useApp'
 
@@ -25,10 +25,10 @@ type Option = {
 }
 
 const OPTIONS: Option[] = [
-  { key: '1x4', layoutId: '1x4', eight: false, name: '1x4 스트립', hint: '세로 한 줄' },
-  { key: '2x3', layoutId: '2x3', eight: false, name: '2x3 그리드', hint: '6장 모두 다른 사진' },
-  { key: '2x4-4', layoutId: '2x4', eight: false, name: '2x4 그리드', hint: '같은 사진이 두 줄로' },
-  { key: '2x4-8', layoutId: '2x4', eight: true, name: '2x4 그리드', hint: '8장 모두 다른 사진' },
+  { key: '1x4', layoutId: '1x4', eight: false, name: '4컷', hint: '세로로 긴 한 장' },
+  { key: '2x3', layoutId: '2x3', eight: false, name: '6컷', hint: '두 줄에 여섯 장' },
+  { key: '2x4-4', layoutId: '2x4', eight: false, name: '4컷 두 장', hint: '똑같이 두 장, 나눠 갖기 좋아요' },
+  { key: '2x4-8', layoutId: '2x4', eight: true, name: '8컷', hint: '두 줄에 여덟 장' },
 ]
 
 /** True-proportion mini frame. Cells are placed in percent so it scales with the box. */
@@ -122,9 +122,9 @@ export default function FrameScreen() {
   return (
     <section className="flex h-full flex-col px-12 pt-8 pb-8">
       <div className="text-center">
-        <h1 className="text-3xl font-bold tracking-tight">프레임을 골라 주세요</h1>
+        <h1 className="text-3xl font-bold tracking-tight">몇 컷 찍을까요?</h1>
         <p id="frame-help" className="mt-2 text-base text-muted-foreground">
-          방향키로 옮기고 Enter로 정해요.
+          고른 칸 수만큼 찍어요.
         </p>
       </div>
 
@@ -137,7 +137,6 @@ export default function FrameScreen() {
         {OPTIONS.map((opt, index) => {
           const layout = LAYOUTS[opt.layoutId]
           const isSelected = selected === opt.key
-          const count = shotCount(layout, opt.eight)
           return (
             <motion.div key={opt.key} {...enter(index * 0.06)}>
               <motion.button
@@ -163,7 +162,6 @@ export default function FrameScreen() {
                 <FramePreview layout={layout} eightShotMode={opt.eight} />
                 <span className="flex flex-col items-center gap-1">
                   <span className="text-lg font-semibold">{opt.name}</span>
-                  <span className="text-base font-medium">{count}컷</span>
                   <span className="text-sm text-muted-foreground">{opt.hint}</span>
                 </span>
               </motion.button>
