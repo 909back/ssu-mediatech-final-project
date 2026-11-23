@@ -139,7 +139,7 @@ export default function SaveScreen() {
       </div>
 
       <div className="flex w-full max-w-[340px] flex-col gap-6 lg:pt-6">
-        <h1 className="text-3xl font-extrabold tracking-tight text-ink">다 됐어요</h1>
+        <h1 className="text-3xl font-extrabold tracking-tight text-ink">네컷이 완성됐어요</h1>
 
         <div className="flex flex-col gap-4 lg:mt-auto">
           <ExportRow job={jobs.png}>
