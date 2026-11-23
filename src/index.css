@@ -1,18 +1,5 @@
-/* Hallmark · shape: app screen · genre: playful · theme: brand · redesign: full
- * paper: #fff (surface: absolute, the original white) · accent: oklch(45.4% 0.0892 57.03) · display: Pretendard Variable · body: Pretendard Variable
- * nav: kept top bar, wordmark left and the four-step track right · signature: the photo strip, from the frame pick to the roll-out · states: camera waiting, denied, not found, failed, model failed, shooting, review, export running
- * axes: light/grotesk-heavy/neutral · posture: restrained, brown on the one primary action per screen · material: cream paper and the brand felt illustrations; controls are the stock shadcn and Radix set at the owner's request · contrast: pass · v2.0.0 */
-/* Hallmark · pre-emit critique: P4 H5 E4 S4 R4 V3 · weakest: V, a tool screen keeps the camera-left, controls-right order the task needs; varied by putting the frame pick and the save strip in the hero slot instead of a card grid */
-/* Hallmark · tokens: Hallmark accent and muted are named --color-signal and --color-ink-3 here, because shadcn's @theme inline already owns --color-accent (hover surface) and --color-muted */
-/* Hallmark · dropped setEight(v), setSelected(id), eight-shot, frame-help · the owner asked for 2x4 8컷 as its own fourth radio option instead of a switch under the 2x4 card; each option now calls setSelected(o.key) and the 8컷 option sets layoutId 2x4 with eightShotMode on */
-/* Hallmark · waive 28b · the shoot video is a hidden one-pixel source for p5 and ml5, never painted · the camera canvas is the visible element and has no poster to show before permission */
-/* Hallmark · waive 39b · the four frame radio rows stand 80px because each carries a 52px frame schematic beside its shot count label · the row is the option, the 다음 button stays at app height */
-/* Hallmark · dismissed F18 · the flagged data-slot nodes are shadcn component hooks (button, progress), not Hallmark picture slots; no picture slot exists in this app */
-/* Hallmark · dropped "고른 칸 수만큼 찍어요." and every helper line that restated the UI · the owner asked for a copy pass that keeps only lines the user cannot see and needs now; the full list is in the handoff */
-/* Hallmark · waive 7b · surface: absolute, paper and card are #fff with Radix gray-12 ink at 17:1 · the owner chose the original white surfaces over the brown-tinted paper */
-/* Hallmark · focus ring is brand-11, not the brand-8 the owner named · brand-8 measures 2.3:1 on white and gate 26a (Floor) needs 3:1; brand-11 is the same brown hue at 5.9:1 */
-/* Hallmark · finish-review: subagent · 8 findings · 7 resolved 1 partial (shoot at 375: stage now 4:3 and the filter bar scrolls, but the gesture pill and filter bar still overlay the camera-state message on a phone) · gap: the felt material went flat when the owner chose the original white and gray colour roles */
-/* Owned by foundation. Stage agents: do not edit; ask via docs/architecture.md rules. */
+/* Dotori 4Cut global styles: Tailwind, Radix palette (accent #7B481E), Pretendard, design tokens.
+ * Brand brown appears only on the primary action of each screen; surfaces are white and Radix gray. */
 @import "tailwindcss";
 @import "tw-animate-css";
 /* Exact Radix custom export for #7B481E (light only). To update, paste a new
@@ -84,7 +71,7 @@
   --color-gray-a12: var(--gray-a12);
 }
 
-/* shadcn semantic tokens mapped onto the Hallmark roles (which read the Radix scales).
+/* shadcn semantic tokens mapped onto the design roles (which read the Radix scales).
    Rule: brand (signal) only on the primary action of each screen.
    Selected states elsewhere use ink, not brand. */
 :root {

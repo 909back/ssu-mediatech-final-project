@@ -1,5 +1,5 @@
 /**
- * Frame layouts (docs/user-flow.md, screen 2). Owned by foundation.
+ * Frame layouts (docs/user-flow.md, screen 2).
  *
  * All numbers are in output pixels of the final composed image.
  * A layout is plain data; cellRects() turns it into pixel rects.

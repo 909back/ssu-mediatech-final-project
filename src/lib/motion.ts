@@ -1,5 +1,5 @@
 /**
- * Motion helpers. Owned by foundation.
+ * Motion helpers.
  * Rules: animate transform and opacity only; always respect reduced motion.
  *
  *   import { animate } from 'motion'

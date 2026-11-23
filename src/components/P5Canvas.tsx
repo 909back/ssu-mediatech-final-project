@@ -22,7 +22,7 @@ export type P5CanvasProps<P extends SketchProps = SketchProps> = {
 } & P
 
 /**
- * Mount a p5 sketch (instance mode) inside React. Owned by foundation.
+ * Mount a p5 sketch (instance mode) inside React.
  *
  *   type Props = { video: HTMLVideoElement | null; filter: FaceFilter }
  *   const sketch: Sketch<Props> = (p, propsRef) => {

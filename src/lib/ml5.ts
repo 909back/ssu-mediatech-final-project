@@ -1,5 +1,5 @@
 /**
- * ml5.js loader. Owned by foundation.
+ * ml5.js loader.
  *
  * ml5 1.x is loaded from a pinned CDN script on first use (not bundled: it
  * ships TensorFlow.js and is large). Pinned to 1.3.1, which works with p5 1.x.

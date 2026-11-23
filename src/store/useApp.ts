@@ -1,9 +1,5 @@
 /**
- * Shared app state (zustand). Owned by foundation.
- *
- * Stage agents: you may APPEND fields/actions in the marked blocks (add the
- * type to the interface AND the value/implementation below). Never rename or
- * remove existing ones; other screens read them. Label your block with your stage.
+ * Shared app state (zustand).
  *
  * In a component (select only what you need, so it re-renders less):
  *   const screen = useApp((s) => s.screen)
@@ -81,7 +77,6 @@ export interface AppState {
   // --- decorate ---
   decor: Decor
 
-  // --- APPEND NEW STATE FIELD TYPES BELOW (stage agents) ---
 
   // --- guide (사용법), v3 ---
   /** true once the visitor left the guide this session; Frame then goes straight to shoot. reset() clears it. */
@@ -110,7 +105,6 @@ export interface AppActions {
   /** "처음부터": back to Start with everything cleared. Camera stream stays alive. */
   reset: () => void
 
-  // --- APPEND NEW ACTION TYPES BELOW (stage agents) ---
 
   // --- guide (사용법), v3 ---
   setGuideSeen: (seen: boolean) => void
@@ -142,7 +136,6 @@ const initialState = (): AppState => ({
   gestureEnabled: true,
   decor: initialDecor(),
 
-  // --- APPEND NEW STATE FIELD VALUES BELOW (stage agents) ---
 
   // --- guide (사용법), v3 ---
   guideSeen: false,
@@ -192,7 +185,6 @@ export const useApp = create<AppStore>()((set, get) => ({
 
   reset: () => set({ ...initialState(), cameraStatus: get().cameraStatus }),
 
-  // --- APPEND NEW ACTION IMPLEMENTATIONS BELOW (stage agents) ---
 
   // --- guide (사용법), v3 ---
   setGuideSeen: (guideSeen) => set({ guideSeen }),

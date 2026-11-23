@@ -1,6 +1,6 @@
-# Dotori 4Cut: architecture and agent contract
+# Dotori 4Cut: architecture
 
-This file wins over `docs/agent-brief.md` where they differ. The approved flow is `docs/user-flow.md`.
+The approved flow is `docs/user-flow.md`.
 
 ## Stack
 
@@ -31,8 +31,8 @@ Path alias: `@/` = `src/` (vite.config.ts + tsconfig paths). Font: Pretendard Va
 | save | `src/screens/save/**`, `src/lib/export.ts` |
 
 Rules for shared files:
-- The store may be extended by stage agents only by APPENDING in the four marked blocks: the type in `AppState` / `AppActions`, the value in `initialState()`, the implementation in `create()`. Wrap your block in a comment with your stage name. Never rename or remove existing keys.
-- Other shared files: do not edit. If you need a change, write it in your report and the lead routes it to foundation.
+- To extend the store, add the type in `AppState` / `AppActions`, the value in `initialState()` and the implementation in `create()`. Never rename or remove existing keys; other screens read them.
+- Shared files (`src/lib/*`, `src/components/*`): change them together with the teammate who owns them.
 - Need a new npm package: `npm i <pkg>`; never hand-edit `package.json`.
 - A stage may add private components inside its own folder (for example `src/screens/shoot/CountdownRing.tsx`).
 
@@ -86,7 +86,7 @@ Selectors: `selectLayout`, `selectShotCount`, `selectAllShotsTaken`, `selectNext
 
 ## Design tokens
 
-- Palette: exact Radix custom export for accent #7B481E in `src/styles/radix-palette.css` (copy of `docs/radix-palette.css`), imported by `src/index.css` together with `src/styles/fonts.css`. Scales: `--brand-1..12`, `--brand-a1..a12`, `--brand-contrast`, `--gray-1..12`, `--gray-a1..a12`. Tailwind utilities: `bg-brand-3`, `text-gray-11`, `border-gray-6`, and so on.
+- Palette: exact Radix custom export for accent #7B481E in `src/styles/radix-palette.css`, imported by `src/index.css` together with `src/styles/fonts.css`. Scales: `--brand-1..12`, `--brand-a1..a12`, `--brand-contrast`, `--gray-1..12`, `--gray-a1..a12`. Tailwind utilities: `bg-brand-3`, `text-gray-11`, `border-gray-6`, and so on.
 - shadcn mapping: `--primary` = brand-9, `--primary-foreground` = brand-contrast, `--ring` = brand-8. Everything else is the Radix gray family: background/card/popover white, foreground gray-12, secondary and muted gray-3, muted-foreground gray-11, accent (shadcn hover surface) gray-4, border gray-6, input gray-7. Note shadcn's `--accent` is a neutral hover color, not the brand.
 - Light mode only. No dark palette has been exported, so there is no `.dark` block and the sonner toaster is forced to light. Add dark mode later by pasting a dark export and adding a `.dark` block in `src/index.css`.
 

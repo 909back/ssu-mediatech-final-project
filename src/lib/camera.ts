@@ -1,5 +1,5 @@
 /**
- * One shared camera stream for the whole app. Owned by foundation.
+ * One shared camera stream for the whole app.
  *
  * - startCamera() asks for permission once and reuses the stream afterwards.
  * - Status is written to the store (cameraStatus) so any screen can react.
