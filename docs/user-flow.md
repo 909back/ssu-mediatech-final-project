@@ -68,7 +68,7 @@ flowchart LR
 
 ### 4. Decorate (`decorate`)
 Canvas preview of the composed frame in the center; tool panel on the right with tabs:
-- 프레임: color (8 presets + picker), background image, preset themes (기본, 도토리 숲, 숭실대 캠퍼스, 레트로 픽셀).
+- 프레임: color (8 presets + picker), background image, preset themes (기본, 도토리 숲, 숭실대 캠퍼스, 레트로 픽셀, 가을 낙엽), drawn from illustrated frame images in public/frames/ (procedural fallback if an image fails to load).
 - 필터: 4 color filters, applied to all shots.
 - 스티커: upload image → auto background removal (tolerance slider 0–120) → move, resize, rotate, layer order, delete (Delete key).
 - 글자: date stamp on/off, custom text (auto black/white contrast).

@@ -30,7 +30,7 @@
  * background is cached per (layout, scale, theme, color, bgImage), so composing
  * many GIF frames in a row is cheap.
  *
- * Draw order: background (bgImage > theme > frameColor), photos (cover-fit),
+ * Draw order: background (bgImage > theme art image > procedural theme > frameColor), photos (cover-fit),
  * color filter per photo, footer (custom text, date, wordmark), stickers by z.
  * Footer text and the wordmark pick black or white per element for contrast
  * with whatever is under them.
@@ -79,7 +79,25 @@ export const THEMES: { id: ThemeId; label: string }[] = [
   { id: 'forest', label: '도토리 숲' },
   { id: 'campus', label: '숭실대 캠퍼스' },
   { id: 'retro', label: '레트로 픽셀' },
+  { id: 'autumn', label: '가을 낙엽' },
 ]
+
+/**
+ * Illustrated frame art, one image per theme per canvas size:
+ * public/frames/<theme>-<w>x<h>.webp. Art lives only in the margins and the
+ * footer corners. 'basic' is a transparent overlay drawn on top of frameColor;
+ * the others are opaque backgrounds. Missing images fall back to the
+ * procedural drawing.
+ */
+const FRAME_ART_THEMES: ReadonlySet<string> = new Set(['basic', 'forest', 'campus', 'retro', 'autumn'])
+/** Width (px) the footer corner art takes on each side, per canvas size. */
+const FRAME_ART_INSET: Record<string, number> = { '600x1800': 160, '1200x1800': 259 }
+
+function frameArtSrc(L: Layout, theme: string) {
+  const size = `${L.width}x${L.height}`
+  if (!FRAME_ART_THEMES.has(theme) || !(size in FRAME_ART_INSET)) return null
+  return { src: `/frames/${theme}-${size}.webp`, inset: FRAME_ART_INSET[size] }
+}
 
 const CHARACTER = '/brand/character.png'
 const FACE = '/brand/face.png'
@@ -423,9 +441,18 @@ async function background(L: Layout, decor: Decor, scale: number): Promise<BgEnt
   ctx.scale(scale, scale)
   let sideInset = 0
   const bg = decor.bgImage ? await toDrawable(decor.bgImage) : null
+  const art = bg ? null : frameArtSrc(L, decor.theme)
+  const artImg = art ? await toDrawable(art.src) : null
   if (bg) {
     drawCover(ctx, bg, 0, 0, L.width, L.height)
-  } else if (decor.theme === 'forest') {
+  } else if (art && artImg) {
+    if (decor.theme === 'basic') {
+      ctx.fillStyle = decor.frameColor || '#ffffff'
+      ctx.fillRect(0, 0, L.width, L.height)
+    }
+    drawCover(ctx, artImg, 0, 0, L.width, L.height)
+    sideInset = art.inset
+  } else if (decor.theme === 'forest' || decor.theme === 'autumn') {
     drawForest(ctx, L)
   } else if (decor.theme === 'campus') {
     drawCampus(ctx, L)
@@ -435,7 +462,7 @@ async function background(L: Layout, decor: Decor, scale: number): Promise<BgEnt
     ctx.fillStyle = decor.frameColor || '#ffffff'
     ctx.fillRect(0, 0, L.width, L.height)
   }
-  if (!bg) sideInset = await footerSideArt(ctx, L, decor.theme)
+  if (!bg && !artImg) sideInset = await footerSideArt(ctx, L, decor.theme === 'autumn' ? 'forest' : decor.theme)
   const entry = { key, canvas, sideInset }
   bgCache.unshift(entry)
   if (bgCache.length > 6) bgCache.pop()
