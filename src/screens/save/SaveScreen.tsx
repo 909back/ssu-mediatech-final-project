@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from 'react'
 import { motion, useReducedMotion } from 'motion/react'
 import { toast } from 'sonner'
-import { Download, Film, Images, Paintbrush, RotateCcw } from 'lucide-react'
+import { Check, Download, Film, Images, Paintbrush, RotateCcw } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Progress } from '@/components/ui/progress'
 import { Separator } from '@/components/ui/separator'
@@ -21,9 +21,10 @@ import { cn } from '@/lib/utils'
 import { useApp } from '@/store/useApp'
 
 type Kind = 'png' | 'gif' | 'webm'
-type JobState = { running: boolean; progress: number }
+/** done stays true after a successful save so the button keeps showing it; clicking again saves again. */
+type JobState = { running: boolean; progress: number; done: boolean }
 
-const IDLE: JobState = { running: false, progress: 0 }
+const IDLE: JobState = { running: false, progress: 0, done: false }
 const STRIP_MAX_H = 600
 const ROLL_SECONDS = 1.8
 
@@ -93,6 +94,7 @@ export default function SaveScreen() {
       } else {
         await exportWebM(shots, layout, decor, { seconds: 6, fps: 30, eightShotMode, onProgress })
       }
+      setJob(kind, { done: true })
       toast.success('저장했어요', { description: '다운로드 폴더를 확인해 주세요.' })
     } catch (err) {
       toastError(err)
@@ -149,8 +151,8 @@ export default function SaveScreen() {
               disabled={jobs.png.running || !stripUrl}
               onClick={() => run('png')}
             >
-              <Download />
-              사진으로 저장 (PNG)
+              {jobs.png.done ? <Check /> : <Download />}
+              {jobs.png.done ? 'PNG 저장 완료' : '사진으로 저장 (PNG)'}
             </Button>
           </ExportRow>
 
@@ -162,8 +164,8 @@ export default function SaveScreen() {
               disabled={jobs.gif.running}
               onClick={() => run('gif')}
             >
-              <Images />
-              {jobs.gif.running ? 'GIF 만드는 중' : '움직이는 사진 (GIF)'}
+              {jobs.gif.done && !jobs.gif.running ? <Check /> : <Images />}
+              {jobs.gif.running ? 'GIF 만드는 중' : jobs.gif.done ? 'GIF 저장 완료' : '움직이는 사진 (GIF)'}
             </Button>
           </ExportRow>
 
@@ -178,8 +180,8 @@ export default function SaveScreen() {
               disabled={jobs.webm.running}
               onClick={() => run('webm')}
             >
-              <Film />
-              {jobs.webm.running ? '영상 녹화 중' : '영상 (WebM)'}
+              {jobs.webm.done && !jobs.webm.running ? <Check /> : <Film />}
+              {jobs.webm.running ? '영상 녹화 중' : jobs.webm.done ? '영상 저장 완료' : '영상 (WebM)'}
             </Button>
           </ExportRow>
         </div>
