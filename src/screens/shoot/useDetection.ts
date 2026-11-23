@@ -113,6 +113,14 @@ export function useDetection(opts: DetectionOptions) {
       }
 
       if (video && video.readyState >= 2 && video.videoWidth) {
+        // The tfjs models behind ml5 size their input from the element's
+        // width/height attributes, not videoWidth/videoHeight. Without them a
+        // <video> reads as 0x0 and detect() always returns []. Keep them in
+        // sync (the camera can change resolution); CSS still hides the element.
+        if (video.width !== video.videoWidth || video.height !== video.videoHeight) {
+          video.width = video.videoWidth
+          video.height = video.videoHeight
+        }
         try {
           if (o.faceNeeded && faceModel.current && performance.now() - lastFace >= faceGap) {
             lastFace = performance.now()

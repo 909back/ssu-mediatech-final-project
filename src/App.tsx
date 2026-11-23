@@ -4,6 +4,7 @@ import { Toaster } from '@/components/ui/sonner'
 import { TooltipProvider } from '@/components/ui/tooltip'
 import DecorateScreen from '@/screens/decorate/DecorateScreen'
 import FrameScreen from '@/screens/frame/FrameScreen'
+import GuideScreen from '@/screens/guide/GuideScreen'
 import SaveScreen from '@/screens/save/SaveScreen'
 import ShootScreen from '@/screens/shoot/ShootScreen'
 import StartScreen from '@/screens/start/StartScreen'
@@ -12,6 +13,7 @@ import { SCREENS, useApp, type Screen } from '@/store/useApp'
 const SCREEN_COMPONENTS: Record<Screen, ComponentType> = {
   start: StartScreen,
   frame: FrameScreen,
+  guide: GuideScreen,
   shoot: ShootScreen,
   decorate: DecorateScreen,
   save: SaveScreen,
@@ -22,7 +24,7 @@ const SCREEN_COMPONENTS: Record<Screen, ComponentType> = {
 if (import.meta.env.DEV) {
   const params = new URLSearchParams(window.location.search)
   const screen = params.get('screen') as Screen | null
-  if (screen && (SCREENS as readonly string[]).includes(screen)) {
+  if (screen && (screen === 'guide' || (SCREENS as readonly string[]).includes(screen))) {
     const samples = ['/brand/sample-wink.jpg', '/brand/sample-cheeks.jpg', '/brand/sample-vsign.jpg', '/brand/sample-hug.jpg']
     const store = useApp.getState()
     const layout = params.get('layout')

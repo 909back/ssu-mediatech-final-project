@@ -87,6 +87,7 @@ export default function FrameScreen() {
   const storedEight = useApp((s) => s.eightShotMode)
   const setLayout = useApp((s) => s.setLayout)
   const setEightShotMode = useApp((s) => s.setEightShotMode)
+  const guideSeen = useApp((s) => s.guideSeen)
 
   const [selected, setSelected] = useState<OptionKey>(keyOf(storedLayoutId as LayoutId, storedEight))
   const radios = useRef<Partial<Record<OptionKey, HTMLButtonElement | null>>>({})
@@ -100,7 +101,8 @@ export default function FrameScreen() {
     // Setters clear the shots, so only call them when something changed.
     if (current.layoutId !== storedLayoutId) setLayout(current.layoutId)
     if (nextEight !== storedEight) setEightShotMode(nextEight)
-    goTo('shoot')
+    // New visitors see the guide once per session.
+    goTo(guideSeen ? 'shoot' : 'guide')
   }
 
   const move = (key: OptionKey) => {

@@ -50,6 +50,7 @@ import {
 import { ClipBuffer, captureStill } from './capture'
 import FramePanel from './FramePanel'
 import GestureControl from './GestureControl'
+import HandFeedback, { type HandView } from './HandFeedback'
 import { previewSketch, sketchCanvas, type FaceSample, type PreviewProps } from './previewSketch'
 import { useDetection } from './useDetection'
 import type p5 from 'p5'
@@ -72,6 +73,22 @@ function fit(box: { w: number; h: number }, aspect: number) {
   if (box.w <= 0 || box.h <= 0) return { w: 0, h: 0 }
   const w = Math.min(box.w, box.h * aspect)
   return { w: Math.floor(w), h: Math.floor(w / aspect) }
+}
+
+/** Circle around the hand in preview pixels (same cover-crop + mirror as previewSketch). */
+function handInPreview(
+  hand: HandPrediction,
+  video: HTMLVideoElement | null,
+  box: { w: number; h: number },
+): Pick<HandView, 'x' | 'y' | 'r'> | null {
+  if (!video?.videoWidth || box.w <= 0) return null
+  const s = Math.max(box.w / video.videoWidth, box.h / video.videoHeight)
+  const ox = (box.w - video.videoWidth * s) / 2
+  const oy = (box.h - video.videoHeight * s) / 2
+  const xs = hand.keypoints.map((k) => box.w - (ox + k.x * s))
+  const ys = hand.keypoints.map((k) => oy + k.y * s)
+  const [x0, x1, y0, y1] = [Math.min(...xs), Math.max(...xs), Math.min(...ys), Math.max(...ys)]
+  return { x: (x0 + x1) / 2, y: (y0 + y1) / 2, r: Math.max(x1 - x0, y1 - y0) / 2 + 12 }
 }
 
 /**
@@ -108,7 +125,7 @@ export default function ShootScreen() {
   const [count, setCount] = useState<number | null>(null)
   const [selectedCell, setSelectedCell] = useState<number | null>(null)
   const [confirmBack, setConfirmBack] = useState(false)
-  const [holdProgress, setHoldProgress] = useState(0)
+  const [handView, setHandView] = useState<HandView | null>(null)
   const [cooling, setCooling] = useState(false)
   const session = useRef<{ cancelled: boolean } | null>(null)
   const cooldownUntil = useRef(0)
@@ -150,6 +167,10 @@ export default function ShootScreen() {
   }, [])
   const aspect = cellAspect(layout, eightShotMode)
   const preview = fit(stage, aspect)
+  const previewRef = useRef(preview)
+  useEffect(() => {
+    previewRef.current = preview
+  })
   const cell = cellRects(layout, eightShotMode)[0]
 
   // --- gesture hold + cooldown ---
@@ -157,7 +178,7 @@ export default function ShootScreen() {
   const cooldownTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined)
   const resetHold = useCallback(() => {
     hold.reset()
-    setHoldProgress(0)
+    setHandView(null)
   }, [hold])
   /** Ignore gestures for GESTURE_COOLDOWN_MS (shows "잠시 쉬는 중"). */
   const startCooldown = useCallback(() => {
@@ -257,13 +278,14 @@ export default function ShootScreen() {
       const inReview = selectAllShotsTaken(useApp.getState())
       const active = !!hand && (inReview ? isOpenPalm(hand) : isVSign(hand))
       const { progress, fired } = hold.update(active, now)
-      setHoldProgress(fired ? 0 : progress)
+      const at = hand && !fired ? handInPreview(hand, videoEl.current, previewRef.current) : null
+      setHandView(at && { ...at, active, progress })
       if (!fired) return
       startCooldown()
       if (inReview) goTo('decorate')
       else runSession()
     },
-    [hold, resetHold, startCooldown, goTo, runSession],
+    [hold, resetHold, startCooldown, goTo, runSession, videoEl],
   )
 
   const onFace = useCallback((face: { keypoints: FaceSample['keypoints'] } | null) => {
@@ -297,6 +319,13 @@ export default function ShootScreen() {
     onHand,
     onError: onModelError,
   })
+
+  // --- live gesture status on the preview (how-to lives on the guide page) ---
+  let gestureStatus: string | null = null
+  if (cameraReady && !shooting && gestureEnabled && handStatus !== 'error') {
+    if (cooling) gestureStatus = '잠시만요'
+    else if (handStatus === 'loading') gestureStatus = '손 인식 준비 중'
+  }
 
   // --- back ---
   const anyTaken = shots.some(Boolean)
@@ -348,6 +377,12 @@ export default function ShootScreen() {
             />
           )}
 
+          <HandFeedback
+            status={gestureStatus}
+            hand={handNeeded ? handView : null}
+            hint={review ? '손바닥을 펴 보세요' : '브이를 만들어 보세요'}
+          />
+
           {!cameraReady && <CameraState status={cameraStatus} onRetry={retry} />}
 
           {/* Gesture control, top right */}
@@ -358,10 +393,6 @@ export default function ShootScreen() {
                 resetHold()
                 setGestureEnabled(on)
               }}
-              progress={handNeeded ? holdProgress : 0}
-              status={handStatus}
-              hint=""
-              paused={shooting || cooling}
             />
           </div>
 
@@ -418,7 +449,14 @@ export default function ShootScreen() {
 
       {/* Right: frame + actions */}
       <aside className="flex shrink-0 flex-col gap-4 lg:w-[340px]">
-        <div className="flex items-center justify-end">
+        <div className="flex items-center justify-end gap-3">
+          <button
+            type="button"
+            onClick={() => goTo('guide')}
+            className="rounded-sm text-sm text-ink-2 underline-offset-4 hover:text-ink hover:underline"
+          >
+            사용법
+          </button>
           <span className="rounded-full bg-paper-2 px-3 py-1 text-sm font-semibold text-ink tabular-nums" aria-live="polite">
             {taken}/{shots.length}컷
           </span>
