@@ -17,7 +17,10 @@ export type { LayoutId } from '@/lib/layouts'
 
 /** Screen order of the main flow. */
 export const SCREENS = ['start', 'frame', 'shoot', 'decorate', 'save'] as const
-export type Screen = (typeof SCREENS)[number]
+/** Screens in the main flow (StepIndicator shows these). */
+export type FlowScreen = (typeof SCREENS)[number]
+// --- guide (사용법), v3: off-flow screen between frame and shoot; StepIndicator folds it into 촬영 ---
+export type Screen = FlowScreen | 'guide'
 
 export type CameraStatus = 'idle' | 'requesting' | 'ready' | 'denied' | 'notfound' | 'error'
 export type FaceFilter = 'none' | 'dog' | 'glasses' | 'blush'
@@ -79,6 +82,11 @@ export interface AppState {
   decor: Decor
 
   // --- APPEND NEW STATE FIELD TYPES BELOW (stage agents) ---
+
+  // --- guide (사용법), v3 ---
+  /** true once the visitor left the guide this session; Frame then goes straight to shoot. reset() clears it. */
+  guideSeen: boolean
+  // --- end guide ---
 }
 
 export interface AppActions {
@@ -103,6 +111,10 @@ export interface AppActions {
   reset: () => void
 
   // --- APPEND NEW ACTION TYPES BELOW (stage agents) ---
+
+  // --- guide (사용법), v3 ---
+  setGuideSeen: (seen: boolean) => void
+  // --- end guide ---
 }
 
 export type AppStore = AppState & AppActions
@@ -131,6 +143,10 @@ const initialState = (): AppState => ({
   decor: initialDecor(),
 
   // --- APPEND NEW STATE FIELD VALUES BELOW (stage agents) ---
+
+  // --- guide (사용법), v3 ---
+  guideSeen: false,
+  // --- end guide ---
 })
 
 export const useApp = create<AppStore>()((set, get) => ({
@@ -177,6 +193,10 @@ export const useApp = create<AppStore>()((set, get) => ({
   reset: () => set({ ...initialState(), cameraStatus: get().cameraStatus }),
 
   // --- APPEND NEW ACTION IMPLEMENTATIONS BELOW (stage agents) ---
+
+  // --- guide (사용법), v3 ---
+  setGuideSeen: (guideSeen) => set({ guideSeen }),
+  // --- end guide ---
 }))
 
 /** Derived selectors. Use as useApp(selectLayout). All return stable values. */

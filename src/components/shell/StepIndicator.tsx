@@ -1,7 +1,7 @@
-import { SCREENS, type Screen } from '@/store/useApp'
+import { SCREENS, type FlowScreen, type Screen } from '@/store/useApp'
 import { cn } from '@/lib/utils'
 
-const LABELS: Record<Screen, string> = {
+const LABELS: Record<FlowScreen, string> = {
   start: '시작',
   frame: '프레임',
   shoot: '촬영',
@@ -11,7 +11,8 @@ const LABELS: Record<Screen, string> = {
 
 /** Read-only progress of the main flow. Current step uses foreground, never brand. */
 export default function StepIndicator({ current }: { current: Screen }) {
-  const currentIndex = SCREENS.indexOf(current)
+  // The guide (사용법) is part of the 촬영 step, not a step of its own.
+  const currentIndex = SCREENS.indexOf(current === 'guide' ? 'shoot' : current)
   return (
     <ol className="flex items-center gap-1 text-sm" aria-label="진행 단계">
       {SCREENS.map((id, i) => (

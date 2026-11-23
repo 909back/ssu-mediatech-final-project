@@ -70,6 +70,7 @@ export default function FrameScreen() {
   const storedEight = useApp((s) => s.eightShotMode)
   const setLayout = useApp((s) => s.setLayout)
   const setEightShotMode = useApp((s) => s.setEightShotMode)
+  const guideSeen = useApp((s) => s.guideSeen)
 
   const initialKey = OPTIONS.find(
     (o) => o.layoutId === storedLayoutId && (o.layoutId !== '2x4' || o.eight === storedEight)
@@ -84,7 +85,8 @@ export default function FrameScreen() {
     // Setters clear the shots, so only call them when something changed.
     if (opt.layoutId !== storedLayoutId) setLayout(opt.layoutId)
     if (nextEight !== storedEight) setEightShotMode(nextEight)
-    goTo('shoot')
+    // New visitors see the guide once per session.
+    goTo(guideSeen ? 'shoot' : 'guide')
   }
 
   const move = (key: string) => {
